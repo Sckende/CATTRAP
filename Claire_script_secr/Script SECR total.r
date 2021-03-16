@@ -1,18 +1,25 @@
 ##SCRIPT pour les données captures tests appats#########
+rm(list = ls())
+
 library(secr)
 library(maptools)
-setwd("~/Desktop/CMR/ANALYSES R")
+setwd("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Nais_script")
 
 ##1########## importer les fichiers CMR et TEST separés et tot.....
 ###CMR
-a<-read.delim("a.txt",sep=" ",header=F)
-b<-read.delim("b.txt",sep=" ",header=F)
+a <- read.delim("a.txt", sep = " ", header = T)
+b <- read.delim("b.txt", sep = " ", header = T, colClasses = c("usage" = "character"))
 ###TEST
-a1<-read.delim("a1.txt",sep=" ",header=F)
-b1<-read.delim("b1.txt",sep=" ",header=F)
+a1 <- read.delim("a1.txt", sep = " ", header = T) # Bug dans certaines lignes non apparent quand on ouvre le ficher avec notepad
+a1_cor <- read.delim("a1_cor.txt", sep = "\t", header = T) # Fichier corrigé
+
+b1 <- read.delim("b1.txt", sep = " ", header = T, colClasses = c("usage" = "character"))
+
 ###tot
-atot<-read.delim("atot.txt",sep=" ",header=F)
-btot<-read.delim("btot.txt",sep=" ",header=F)
+atot <- read.delim("atot.txt", sep = " ", header = F) # Meme pb que le fichier a1.txt
+atot_cor <- read.delim("atot_cor.txt", sep = "\t", header = T)
+
+btot <- read.delim("btot.txt", sep = " ", header = T, colClasses = c("usage" = "character"))
 
 
 
