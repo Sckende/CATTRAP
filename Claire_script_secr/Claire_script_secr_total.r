@@ -66,9 +66,12 @@ ovmask_closed <- secr::addCovariates(ovmask_closed, Ha)
 #####################
 
 # Null model
+# fit0_open <- secr::secr.fit(d_open,
+#                       mask = ovmask_open,
+#                       model = D ~ 1)
 fit0_open <- secr::secr.fit(d_open,
-                      mask = ovmask_open,
-                      model = D ~ 1)
+                            mask = ovmask_open,
+                            model = list(g0 = ~ 1, sigma = ~ 1))
 # Detection probability constant across animals, occasions and detectors
 fit1_open <- secr::secr.fit(d_open,
                             mask = ovmask_open,
@@ -80,11 +83,12 @@ fit2_open <- secr::secr.fit(d_open,
 # learn reponse affects both g0 and sigma
 fit3_open <- secr::secr.fit(d_open,
                             mask = ovmask_open,
-                            model = list(g0 ~ b, sigma ~ b))
+                            model = list(g0 ~ b, sigma ~ b)) # both detection parameters change after first capture (INUTILE !)
 # Detection probability varies with individuals learning and time (pour savoir si les cages deviennent attractante seulement au bout de plusieurs jours après installation)
 fit4_open <- secr::secr.fit(d_open,
                             mask = ovmask_open,
                             model = list(g0 ~ b + T))
+
 
 ##########################
 #### Closed session ####
