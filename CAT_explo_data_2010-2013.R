@@ -1,6 +1,6 @@
 ##### Exploration of cat trap data from 2010 to 2013 #####
 # Multiple origins: Parc National, SEOR, AV2M
-
+rm(list = ls())
 
 #### DATA TOTAL CAPTURE PER TRAP ####
 tot_trap <- read.table("C:/Users/Etudiant/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/BDD_CHAT_MODIFIEE/CHAT_bilan_Captures_par_cage_2010-2013.txt", sep = "\t", h = T, dec = ",")
@@ -38,6 +38,11 @@ for(i in 1:length(unique(tot_trap$hab_type))){
 # [1] "Taches de forêt semi-sèche (dans fourrés secs anthropiques)" = "TFSS"
 
 
-#### DATA CAPTURE ####
-cat_trap <- read.table("C:/Users/Etudiant/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/BDD_CHAT_MODIFIEE/CHAT_Captures_2010-2013.txt", sep = "\t", h = T, dec = ",")
-summary(cat_trap)
+t <- tapply(tot_trap$trap_night, tot_trap$year, sum)
+tc <- tapply(tot_trap$trapped_cat, tot_trap$year, sum)
+
+rate <- tc/t
+
+plot(rate)
+
+#### IDEM MAIS AVEC DATA DE NAIS ####
