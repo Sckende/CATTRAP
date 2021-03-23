@@ -46,3 +46,8 @@ rate <- tc/t
 plot(rate)
 
 #### IDEM MAIS AVEC DATA DE NAIS ####
+rm(list = ls())
+
+#### DATA TOTAL CAPTURE PER TRAP ####
+cat_trap <- read.table("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Catch_rate/CAT_trapped_2010_2018.txt", sep = "\t", h = T, dec = ",")
+summary(cat_trap)
