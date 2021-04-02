@@ -61,3 +61,50 @@ fit6 <- secr::secr.fit(d,
 
 ##### COMPARAISON DE TOUS LES MODELES ####
 AIC(fit0, fit1, fit2, fit3, fit4, fit5, fit6)
+
+
+#------------------------------------#
+#### Rajouter les mask et buffer ####
+#----------------------------------#
+
+Ha <- maptools::readShapeSpatial("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/Habitat")
+ovtrap <-secr::traps(d)
+ovmask <- secr::make.mask(ovtrap,
+                    buffer = 1000,
+                    type = "trapbuffer",
+                    poly = Ha,
+                    keep.poly = FALSE)
+ovmask <- secr::addCovariates(ovmask, Ha)
+
+# Fitting models
+fit0 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = D ~ 1)
+# Detection probability constant across animals, occasions and detectors
+fit1 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = g0 ~ 1)
+# Detection probability varies with individual behaviour = learning reponse (b)
+fit2 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = g0 ~ b)
+# learn reponse affects both g0 and sigma
+fit3 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = list(g0 ~ b, sigma ~ b))
+# Detection probability varies with individuals learning and time (pour savoir si les cages deviennent attractante seulement au bout de plusieurs jours après installation)
+fit4 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = list(g0 ~ b + T))
+# Session
+fit5 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = list(D ~ session, g0 ~ session, sigma ~ session))
+
+# Session
+fit6 <- secr::secr.fit(d,
+                       mask = ovmask,
+                       model = list(D ~ 1, g0 ~ session, sigma ~ session))
+
+##### COMPARAISON DE TOUS LES MODELES ####
+AIC(fit0, fit1, fit2, fit3, fit4, fit5, fit6)
