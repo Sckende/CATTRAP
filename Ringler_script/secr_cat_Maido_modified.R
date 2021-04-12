@@ -160,7 +160,8 @@ Mcat12 <- secr.fit(cat_maido,
                    buffer = 3000,
                    verify = F)
 
-AIC(Mcat01,Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12)
+AIC(#Mcat01,
+  Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12)
 # best model...Mcat04
 # graph proba de detection vs distance au centre d'activité/domaine vital
 plot(Mcat04,xval=0:2000)
