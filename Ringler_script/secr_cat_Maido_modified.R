@@ -37,6 +37,10 @@ cat_maido <- read.capthist(capt,c(trapfile2, trapfile1),
 
 cat_maido <- shareFactorLevels(cat_maido)
 
+#### Home range statistics ####
+secr::dbar(cat_maido) #the mean distance between consecutive capture locations, pooled over individuals (e.g. Efford 2004). moves returns the raw distances.
+secr::MMDM(cat_maido) #the average maximum distance between detections of each individual i.e. the observed range length averaged over individuals (Otis et al. 1978).
+
 #### for comparaison btw halfnormal & hazard rate dfn ####
 # halfnormal dfn
 Mtest01 <- secr.fit(cat_maido,
@@ -100,6 +104,8 @@ HR50 <- 3.14*((circular.r(p = 0.5,
                           detectpar = list(sigma = 1, z = 3.88)))*820)^2
 # HR50 = 0.7 km2
 
+
+
 Mcat05 <- secr.fit(cat_maido,
                    model = list(D~1, g0~session, sigma~1, z~1),
                    detectfn = 1, # hazard rate
@@ -115,8 +121,21 @@ Mcat06 <- secr.fit(cat_maido,
                    buffer = 3000,
                    verify = F)
 # D ~ 0.19
-# g0 ~ 0,08
-# sigma ~ 820
+# g0 ~ 0,10
+# sigma ~ 533 (CLOSED) / 913 (OPEN)
+
+# ----- CLOSED AREA -----#
+# Home range 95% and 50%
+HR95 <- 3.14*(3.36 * 533)^2
+# HR95closed = 10.1 km2
+HR50 <- 3.14*(1 * 533)^2
+# HR50closed = 0.8 km2
+
+# ----- OPEN AREA -----#
+HR95 <- 3.14*(3.36 * 913)^2
+# HR95open = 29.5 km2
+HR50 <- 3.14*(1 * 913)^2
+# HR50open = 2.6 km2
 
 Mcat07 <- secr.fit(cat_maido,
                    model = list(D~1, g0~session, sigma~session, z~1),
@@ -161,9 +180,12 @@ Mcat12 <- secr.fit(cat_maido,
                    verify = F)
 
 AIC(#Mcat01,
-  Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12)
+  #Mcat02,
+  Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11#,Mcat12
+  )
 # best model...Mcat04
 # graph proba de detection vs distance au centre d'activité/domaine vital
 plot(Mcat04,xval=0:2000)
 
 
+# Model averaging ?
