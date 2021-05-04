@@ -1,7 +1,7 @@
 ### CMR chats Maido
 
-# 2 sessions, 30 jours, 20/21 cameras traps
-# CLOSED = foret, hos sentier
+# 2 sessions, 30 (open) & 33 (closed) jours, 20/21 cameras traps
+# CLOSED = foret, hors sentier
 # OPEN = sentiers 
 #-----------------------------#
 #### Multi-session models ####
@@ -37,7 +37,7 @@ cat_maido <- read.capthist(capt,c(trapfile2, trapfile1),
 
 cat_maido <- shareFactorLevels(cat_maido)
 
-#### Home range statistics ####
+#### Average individual movement statistics ####
 secr::dbar(cat_maido) #the mean distance between consecutive capture locations, pooled over individuals (e.g. Efford 2004). moves returns the raw distances.
 secr::MMDM(cat_maido) #the average maximum distance between detections of each individual i.e. the observed range length averaged over individuals (Otis et al. 1978).
 
@@ -61,12 +61,12 @@ Mtest02 <- secr.fit(cat_maido,
 AIC(Mtest01, Mtest02)
 
 # halfnormal dfn
-Mcat01 <- secr.fit(cat_maido,
-                   model = list(D~session, g0~1, sigma~1),
-                   detectfn = 0, # halfnormal
-                   CL = F,
-                   buffer = 3000,
-                   verify = F)
+# Mcat01 <- secr.fit(cat_maido,
+#                    model = list(D~session, g0~1, sigma~1),
+#                    detectfn = 0, # halfnormal
+#                    CL = F,
+#                    buffer = 3000,
+#                    verify = F)
 # D ~ 0.18, 0.15
 # g0 ~ 0,07
 # sigma ~ 900
@@ -97,11 +97,12 @@ Mcat04 <- secr.fit(cat_maido,
 # Home range 95% and 50%
 HR95 <- 3.14*((circular.r(p = 0.95,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.88)))*820)^2
+                          detectpar = list(sigma = 1, z = 3.92)))*820)^2
 # HR95 = 7.9 km2
 HR50 <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.88)))*820)^2
+                          detectpar = list(sigma = 1, z = 3.92)))*820)^2 #sigma = le nombre de fois qu'on multiplie le sigma- circular.r permet de déterminer un démultiplicateur 
+
 # HR50 = 0.7 km2
 
 
@@ -123,19 +124,28 @@ Mcat06 <- secr.fit(cat_maido,
 # D ~ 0.19
 # g0 ~ 0,10
 # sigma ~ 533 (CLOSED) / 913 (OPEN)
+# z = 
 
 # ----- CLOSED AREA -----#
 # Home range 95% and 50%
-HR95 <- 3.14*(3.36 * 533)^2
-# HR95closed = 10.1 km2
-HR50 <- 3.14*(1 * 533)^2
-# HR50closed = 0.8 km2
+HR95 <- 3.14*((circular.r(p = 0.95,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*533)^2
+# HR95closed = 5870115
+HR50 <- 3.14*((circular.r(p = 0.5,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*533)^2
+# HR50closed = 283558.4
 
 # ----- OPEN AREA -----#
-HR95 <- 3.14*(3.36 * 913)^2
-# HR95open = 29.5 km2
-HR50 <- 3.14*(1 * 913)^2
-# HR50open = 2.6 km2
+HR95 <- 3.14*((circular.r(p = 0.95,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*913)^2
+# HR95open = 17223988
+HR50 <- 3.14*((circular.r(p = 0.5,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*913)^2
+# HR50open = 832012.1
 
 Mcat07 <- secr.fit(cat_maido,
                    model = list(D~1, g0~session, sigma~session, z~1),
@@ -179,13 +189,28 @@ Mcat12 <- secr.fit(cat_maido,
                    buffer = 3000,
                    verify = F)
 
-AIC(#Mcat01,
-  #Mcat02,
-  Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11#,Mcat12
-  )
-# best model...Mcat04
-# graph proba de detection vs distance au centre d'activitÃ©/domaine vital
+Mcat13 <- secr.fit(cat_maido,
+                   model = list(D~session, g0~session, sigma~1, z~1),
+                   detectfn = 1, # hazard rate
+                   CL = F,
+                   buffer = 3000,
+                   verify = F)
+
+Mcat14 <- secr.fit(cat_maido,
+                   model = list(D~session, g0~1, sigma~1, z~1),
+                   detectfn = 1, # hazard rate
+                   CL = F,
+                   buffer = 3000,
+                   verify = F)
+
+AIC(Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
+# best model...Mcat04 & Mcat06
+# graph proba de detection vs distance au centre d'activité/domaine vital
+par(mfrow = c(1, 2))
 plot(Mcat04,xval=0:2000)
+plot(Mcat06, xval=0:2000, col = "blue")
 
 
-# Model averaging ?
+# Model averaging
+
+secr::model.average(Mcat04, Mcat06)
