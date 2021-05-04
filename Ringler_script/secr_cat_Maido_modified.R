@@ -101,7 +101,7 @@ HR95 <- 3.14*((circular.r(p = 0.95,
 # HR95 = 7.9 km2
 HR50 <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.92)))*820)^2 #sigma = le nombre de fois qu'on multiplie le sigma- circular.r permet de déterminer un démultiplicateur 
+                          detectpar = list(sigma = 1, z = 3.92)))*820)^2 #sigma = le nombre de fois qu'on multiplie le sigma- circular.r permet de d?terminer un d?multiplicateur 
 
 # HR50 = 0.7 km2
 
@@ -205,12 +205,40 @@ Mcat14 <- secr.fit(cat_maido,
 
 AIC(Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
 # best model...Mcat04 & Mcat06
-# graph proba de detection vs distance au centre d'activité/domaine vital
+# graph proba de detection vs distance au centre d'activit?/domaine vital
 par(mfrow = c(1, 2))
 plot(Mcat04,xval=0:2000)
 plot(Mcat06, xval=0:2000, col = "blue")
 
 
-# Model averaging
+#### Model averaging ####
 
 secr::model.average(Mcat04, Mcat06)
+
+#### HR computation with medel averaged estimates ####
+
+# SIGMA
+#                 estimate      lcl      ucl
+# session=CLOSED 684.9466     365.5407 1283.446
+# session=OPEN   876.3692     601.0967 1277.703
+
+# ----- CLOSED AREA -----#
+# Home range 95% and 50%
+HR95clo <- 3.14*((circular.r(p = 0.95,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*684.9466)^2
+# HR95closed = 9 694 058
+HR50clo <- 3.14*((circular.r(p = 0.5,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*684.9466)^2
+# HR50closed = 468 275.6
+
+# ----- OPEN AREA -----#
+HR95op <- 3.14*((circular.r(p = 0.95,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*876.3692)^2
+# HR95open = 15 869 615
+HR50op <- 3.14*((circular.r(p = 0.5,
+                          detectfn = 'HR', # hazard rate
+                          detectpar = list(sigma = 1, z = 3.52)))*876.3692)^2
+# HR50open = 766 588.5
