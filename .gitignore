@@ -1,3 +1,4 @@
+.gitignore
 .Rproj.user
 .Rhistory
 .RData
@@ -7,4 +8,4 @@ Claire_script_secr/*.txt
 Claire_script_secr/DATA_pour_David
 Claire_script_secr/GLOBAL_option-ABANDONNED/*.txt
 Claire_script_secr/habitat.*
-CAT_catch_REUN/*.txt
+CAT_catch_REUN
