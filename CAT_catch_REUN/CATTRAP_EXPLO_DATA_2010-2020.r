@@ -1,7 +1,7 @@
 #### Exploration & analysis of trapped cats data ####
 rm(list = ls())
 
-cat <- read.table("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Catch_rate/CATTRAP_Bilan_2010-2020.txt", h = T, dec = ",", sep = "\t")
+cat <- read.table("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN/CATTRAP_Bilan_2010-2020.txt", h = T, dec = ",", sep = "\t")
 dim(cat)
 summary(cat)
 
@@ -139,3 +139,92 @@ points(GBR_trap$lon[GBR_trap$local == "Piste de La Glacière"],
 #### EXTRACTION OF GRAND BENARRE DATABASE ####
 
 # write.table(GBR_trap, 'C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Catch_rate/CATTRAP_GBR_data.txt', sep = '\t', dec = '.')
+
+#### WORK WITH SHAPEFILES ####
+
+# ---- Habitats ---- 
+library('sf')
+# Load the files
+hab <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Habitats/habitat.shp')
+
+# EXploration of METADATA of shapefile
+st_geometry_type(hab) # Object type => hab is composed by 488 polygons
+
+st_crs(hab) # CRS for Coordinate Reference System => hab is in the CRS 'RGR92 / UTM zone 40S'
+
+st_bbox(hab) # the extent of the shapefile = geographic edge or the overall geographic coverage of the spatial object
+ncol(hab)
+nrow(hab)
+dim(hab)
+
+hab # => all of the metadata and attributes for the shapefile object
+
+# Plot of the shapefile object with ggplot2
+library(ggplot2)
+
+ggplot() +
+  geom_sf(data = hab,
+          color = rainbow(n = length(unique(hab$NOM)))[as.numeric(as.factor(hab$NOM))],
+          fill = rainbow(n = length(unique(hab$NOM)), alpha = 0.5)[as.numeric(as.factor(hab$NOM))]) +
+  coord_sf()
+
+# Conversion of .txt into shp
+# Need to have lat & lon, AND DATUM & PROJECTION
+
+CRS <- st_crs(hab) # Use the information about CRS of habitat shapefile for the conversion
+trap_points <- st_as_sf(cat_trap[!is.na(cat_trap$lat),],
+                        coords = c('lon', 'lat'),
+                        crs = CRS) # need to have data, columns name X & Y coordinates & crs
+st_crs(trap_points)
+
+# Plot global trap points!
+ggplot() +
+  geom_sf(data = hab,
+          color = rainbow(n = length(unique(hab$NOM)))[as.numeric(as.factor(hab$NOM))],
+          fill = rainbow(n = length(unique(hab$NOM)), alpha = 0.5)[as.numeric(as.factor(hab$NOM))]) +
+  geom_sf(data = trap_points) +
+  coord_sf()
+
+#### Plot GBR trap points with habitat type ####
+# Coversion of .txt file into sf object
+GBR_trap <- read.table('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN/CATTRAP_GBR_data.txt', h = T, sep = '\t', dec = '.')
+
+GBR_trapPOINTS <- st_as_sf(GBR_trap[!is.na(GBR_trap$lon),],
+                           coords = c('lon', 'lat'),
+                           crs = CRS)
+st_crs(GBR_trapPOINTS)
+
+ggplot() +
+  geom_sf(data = hab,
+          color = rainbow(n = length(unique(hab$NOM)))[as.numeric(as.factor(hab$NOM))],
+          fill = rainbow(n = length(unique(hab$NOM)), alpha = 0.5)[as.numeric(as.factor(hab$NOM))]) +
+  geom_sf(data = GBR_trapPOINTS) +
+  coord_sf()
+
+# ---- Localities .... without localities ... ---- 
+
+library('sf')
+# Load the files
+admin0 <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Admin/REU_adm0.shp')
+admin1 <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Admin/REU_adm1.shp')
+admin2 <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Admin/REU_adm2.shp')
+
+# EXploration of METADATA of shapefile
+st_geometry_type(admin0); st_geometry_type(admin1); st_geometry_type(admin2) 
+
+st_crs(admin0); st_crs(admin1); st_crs(admin2)
+
+st_bbox(admin0); st_bbox(admin1); st_bbox(admin2)
+
+# Plot of the shapefile object with ggplot2
+library(ggplot2)
+
+new_color <- rainbow(n = nrow(admin2), alpha = 0.5)
+ggplot() +
+  # geom_sf(data = admin0) +
+  # geom_sf(data = admin1) +
+  geom_sf(data = admin2,
+          aes(fill = NAME_2)) +
+  scale_color_manual(values = new_color) +
+  geom_sf(data = GBR_trapPOINTS) +
+  coord_sf()
