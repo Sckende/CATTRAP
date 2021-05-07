@@ -188,12 +188,14 @@ ggplot() +
 #### Plot GBR trap points with habitat type ####
 # Coversion of .txt file into sf object
 GBR_trap <- read.table('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN/CATTRAP_GBR_data.txt', h = T, sep = '\t', dec = '.')
+library(sf)
 
 GBR_trapPOINTS <- st_as_sf(GBR_trap[!is.na(GBR_trap$lon),],
                            coords = c('lon', 'lat'),
                            crs = CRS)
 st_crs(GBR_trapPOINTS)
 
+library(ggplot2)
 ggplot() +
   geom_sf(data = hab,
           color = rainbow(n = length(unique(hab$NOM)))[as.numeric(as.factor(hab$NOM))],
@@ -227,4 +229,64 @@ ggplot() +
           aes(fill = NAME_2)) +
   scale_color_manual(values = new_color) +
   geom_sf(data = GBR_trapPOINTS) +
+  coord_sf()
+
+#### EXPLORATION OF GBR DATA ####
+summary(GBR_trapPOINTS)
+unique(GBR_trapPOINTS$local)
+
+
+# plot
+
+new_color <- rainbow(n = length(unique(GBR_trapPOINTS$local)), alpha = 1)
+ggplot() +
+  # geom_sf(data = admin2) +
+  geom_sf(data = GBR_trapPOINTS,
+          aes(color = local)) +
+  scale_color_manual(values = new_color) +
+  coord_sf()
+
+# Cleaning data
+local <- unique(GBR_trapPOINTS$local)[2:6]
+GBR_data <- GBR_trapPOINTS[!(GBR_trapPOINTS$local %in% local),]
+table(GBR_data$local, useNA = "always")
+
+# ---- Plot depending on localities ----
+new_color <- rainbow(n = length(unique(GBR_data$local)), alpha = 1)
+ggplot() +
+  # geom_sf(data = admin2) +
+  geom_sf(data = GBR_data,
+          aes(color = local)) +
+  scale_color_manual(values = new_color) +
+  coord_sf()
+
+# ---- Plot depending on seasons ----
+new_color <- rainbow(n = length(unique(GBR_data$season_year)), alpha = 1)
+ggplot() +
+  # geom_sf(data = admin2) +
+  geom_sf(data = GBR_data,
+          size =4,
+          aes(color = season_year)) +
+  scale_color_manual(values = new_color) +
+  coord_sf()
+
+# Add camera-traps of Naïs
+
+CamTrap <- read.table('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN/CATTRAP_cameratrap_GPS_2015-2016.txt', h = T, sep = '\t', dec = '.')
+library(sf)
+
+CamTrap <- CamTrap[!(CamTrap$lat < 6500000),] # Pb avec coordonnées du B5b
+
+CamTrap <- st_as_sf(CamTrap, coords = c('lon', 'lat'), crs = CRS)
+st_crs(CamTrap)
+
+ggplot() +
+  # geom_sf(data = admin2) +
+  geom_sf(data = GBR_data,
+          size = 4,
+          aes(color = season_year)) +
+  scale_color_manual(values = new_color) +
+  geom_sf(data = CamTrap,
+          shape = 8,
+          size = 3) +
   coord_sf()
