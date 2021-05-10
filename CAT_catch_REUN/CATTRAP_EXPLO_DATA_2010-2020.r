@@ -206,10 +206,15 @@ ggplot() +
 # ---- Localities .... without localities ... ---- 
 
 library('sf')
+library('raster')
+library('rgdal')
 # Load the files
 admin0 <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Admin/REU_adm0.shp')
 admin1 <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Admin/REU_adm1.shp')
 admin2 <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Admin/REU_adm2.shp')
+raster_run <- raster('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/mnt_relief.tif',
+                     crs = '+proj=utm +zone=40 +south +datum=WGS84') # Fond de carte
+sites <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Code_site/Code_site.shp')
 
 # EXploration of METADATA of shapefile
 st_geometry_type(admin0); st_geometry_type(admin1); st_geometry_type(admin2) 
@@ -238,12 +243,12 @@ unique(GBR_trapPOINTS$local)
 
 # plot
 
-new_color <- rainbow(n = length(unique(GBR_trapPOINTS$local)), alpha = 1)
+new_color <- rainbow(n = length(unique(sites$SITE2)), alpha = 0.8)
 ggplot() +
-  # geom_sf(data = admin2) +
-  geom_sf(data = GBR_trapPOINTS,
-          aes(color = local)) +
+  geom_sf(data = sites,
+          aes(fill = SITE2)) +
   scale_color_manual(values = new_color) +
+  geom_sf(data = GBR_trapPOINTS) +
   coord_sf()
 
 # Cleaning data
@@ -265,7 +270,7 @@ new_color <- rainbow(n = length(unique(GBR_data$season_year)), alpha = 1)
 ggplot() +
   # geom_sf(data = admin2) +
   geom_sf(data = GBR_data,
-          size =4,
+          size = 4,
           aes(color = season_year)) +
   scale_color_manual(values = new_color) +
   coord_sf()
