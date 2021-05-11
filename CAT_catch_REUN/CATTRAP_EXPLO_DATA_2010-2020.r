@@ -26,7 +26,7 @@ table(cat_trap$structure, cat_trap$season_year)
 require(dplyr)
 rate <- cat_trap %>%
   dplyr::group_by(season_year) %>%
-  dplyr::summarise(total_cat_trap = sum(trap_cat), total_trap_night = sum(trap_night), catch_rate = sum(trap_cat)/sum(trap_night))
+  dplyr::summarise(total_cat_trap = sum(trap_cat), total_trap_night = sum(trap_night), catch_rate = (sum(trap_cat)/sum(trap_night)*100))
 
 barplot(rate$catch_rate, bty = "n", col = rainbow(length(rate$season_year)), names.arg = rate$season_year)
 
@@ -37,6 +37,8 @@ barplot(rate$catch_rate[rate$season_year %in% period], bty = "n", col = rgb(1, 0
 par(new = T)
 barplot(rate$total_trap_night[rate$season_year %in% period], bty = "n", col = rgb(0, 0, 1, 0.4), xaxt = 'n', yaxt = 'n')
 axis(side = 4)
+
+rate[rate$season_year %in% period,]
 
 # ---- Categorization of protocol type 'old' vs. 'new' ----
 # rate$season_number <- 1:nrow(rate)
@@ -288,18 +290,26 @@ ggplot() +
 CamTrap <- read.table('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN/CATTRAP_cameratrap_GPS_2015-2016.txt', h = T, sep = '\t', dec = '.')
 library(sf)
 
-CamTrap <- CamTrap[!(CamTrap$lat < 6500000),] # Pb avec coordonnées du B5b
-
 CamTrap <- st_as_sf(CamTrap, coords = c('lon', 'lat'), crs = CRS)
 st_crs(CamTrap)
 
 ggplot() +
   # geom_sf(data = admin2) +
-  geom_sf(data = GBR_data,
-          size = 4,
-          aes(color = season_year)) +
-  scale_color_manual(values = new_color) +
+  # geom_sf(data = GBR_data,
+  #         size = 4,
+  #         aes(color = season_year)) +
+  # scale_color_manual(values = new_color) +
   geom_sf(data = CamTrap,
-          shape = 8,
-          size = 3) +
+          #shape = 8,
+          size = 3,
+          aes(color = field)) +
   coord_sf()
+
+# Distance betw points
+
+library('nngeo')
+nngeo::st_nn(CamTrap, CamTrap, k = 2, returnDist = TRUE) 
+
+nngeo::st_nn(CamTrap[CamTrap$field == 'open',], CamTrap[CamTrap$field == 'open',], k = 2, returnDist = TRUE) 
+
+nngeo::st_nn(CamTrap[CamTrap$field == 'closed',], CamTrap[CamTrap$field == 'closed',], k = 2, returnDist = TRUE) 
