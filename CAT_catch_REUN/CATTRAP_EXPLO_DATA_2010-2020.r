@@ -30,6 +30,14 @@ rate <- cat_trap %>%
 
 barplot(rate$catch_rate, bty = "n", col = rainbow(length(rate$season_year)), names.arg = rate$season_year)
 
+# For the 2010-2015 period
+period <- rate$season_year[1:5]
+
+barplot(rate$catch_rate[rate$season_year %in% period], bty = "n", col = rgb(1, 0, 0, 0.6), names.arg = rate$season_year[rate$season_year %in% period])
+par(new = T)
+barplot(rate$total_trap_night[rate$season_year %in% period], bty = "n", col = rgb(0, 0, 1, 0.4), xaxt = 'n', yaxt = 'n')
+axis(side = 4)
+
 # ---- Categorization of protocol type 'old' vs. 'new' ----
 # rate$season_number <- 1:nrow(rate)
 # rate$protocol <- c(rep("old", 6), rep("new", 4))
