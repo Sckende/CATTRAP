@@ -26,7 +26,7 @@ cat_maido <- read.capthist(capt,c(trapfile2, trapfile1),
                            fmt = "trapID",
                            #covnames=c("sex","age","group"),
                            #trapcovnames=c("device"),
-                           detector = "proximity")
+                           detector = "count")
 
 # cat_maido <- read.capthist(file.choose(),c(file.choose(),file.choose()),
 #                            fmt = "trapID",
@@ -36,6 +36,18 @@ cat_maido <- read.capthist(capt,c(trapfile2, trapfile1),
 
 
 cat_maido <- shareFactorLevels(cat_maido)
+
+# plot of captures with tracks
+par(mfrow = c(1, 2)); plot(cat_maido, tracks = T)
+
+# Successive trap-revealed movements
+m <-unlist(moves(cat_maido))
+par(mar =c(3.2,4,1,1),mgp =c(2.1,0.6,0))# reduce margins
+hist(m,xlab ="Movement  m",main ="") # majority of movement is done between 0 & 1500 m
+plot(ecdf(m))
+
+#Quick and biased estimate of sigma
+initialsigma <- RPSV(cat_maido,CC =TRUE)
 
 #### Average individual movement statistics ####
 secr::dbar(cat_maido) #the mean distance between consecutive capture locations, pooled over individuals (e.g. Efford 2004). moves returns the raw distances.
@@ -88,7 +100,7 @@ Mcat04 <- secr.fit(cat_maido,
                    detectfn = 1, # hazard rate
                    CL = F,
                    buffer = 3000,
-                   verify = F)
+                   verify = T)
 # D ~ 0.19/km2
 # g0 ~ 0,08
 # sigma ~ 820m
@@ -227,18 +239,18 @@ secr::model.average(Mcat04, Mcat06)
 HR95clo <- 3.14*((circular.r(p = 0.95,
                           detectfn = 'HR', # hazard rate
                           detectpar = list(sigma = 1, z = 3.52)))*684.9466)^2
-# HR95closed = 9 694 058
+# HR95closed = 9 694 058 m2 = 9.70 km2
 HR50clo <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HR', # hazard rate
                           detectpar = list(sigma = 1, z = 3.52)))*684.9466)^2
-# HR50closed = 468 275.6
+# HR50closed = 468 275.6 m2 = 0.50 km2
 
 # ----- OPEN AREA -----#
 HR95op <- 3.14*((circular.r(p = 0.95,
                           detectfn = 'HR', # hazard rate
                           detectpar = list(sigma = 1, z = 3.52)))*876.3692)^2
-# HR95open = 15 869 615
+# HR95open = 15 869 615 m2 = 15.70 km2
 HR50op <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HR', # hazard rate
                           detectpar = list(sigma = 1, z = 3.52)))*876.3692)^2
-# HR50open = 766 588.5
+# HR50open = 766 588.5 m2 = 7.70 km2
