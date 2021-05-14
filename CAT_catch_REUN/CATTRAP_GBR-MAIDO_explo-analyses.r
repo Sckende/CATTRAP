@@ -8,6 +8,7 @@ library(sp)
 # library(rgdal)
 # library(raster)
 library(ggplot2)
+library(dplyr)
 
 #### DATA IMPORTATION ####
 
@@ -76,6 +77,7 @@ cat_crop_sf$id2 <- 1:length(cat_crop_sf$site)
 points_list <- st_intersects(MDO_shp, cat_crop_sf) # extraction
 
 MDO_data <- cat_crop_sf[cat_crop_sf$id2 %in% points_list[[1]], ] # new spatial datframe
+# st_write(MDO_data, paste0('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN', "/", "MDO_data.csv"), layer_options = "GEOMETRY=AS_WKT", delete_dsn = T)
 unique(MDO_data$local)
 
 # ---- Visualization 
@@ -84,3 +86,22 @@ ggplot() +
   geom_sf(data = cat_crop_sf) +
   geom_sf(data = MDO_data,
           color = 'green')
+
+# ---- Exploration
+
+summary(MDO_data)
+sort(unique(MDO_data$season_year))
+
+
+MDO_trap_rate <- MDO_data %>%
+  dplyr::group_by(season_year) %>%
+  dplyr::summarise(total_cat_trap = sum(trap_cat), total_trap_night = sum(trap_night), catch_rate = (sum(trap_cat)/sum(trap_night)*100))
+
+
+ggplot(data = MDO_trap_rate, aes(x = season_year)) +
+  geom_col(aes(y = total_trap_night)) +
+  geom_line(aes(y = 100*catch_rate), group = 1) +
+  scale_y_continuous(sec.axis = sec_axis(~./100,
+                                         name = 'cat trapped rate (/100trap-days)'))
+
+                     
