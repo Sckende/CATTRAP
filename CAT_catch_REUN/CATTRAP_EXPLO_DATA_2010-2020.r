@@ -22,7 +22,7 @@ tapply(cat_trap$trap_night, cat_trap$season_year, sum)
 # AV2M applied the new protocol only from 2019
 table(cat_trap$structure, cat_trap$season_year)
 
-# ---- Computation of raw capture rate/season_year ----
+# ---- Computation of raw capture rate/season_year for all sites ----
 require(dplyr)
 rate <- cat_trap %>%
   dplyr::group_by(season_year) %>%
@@ -152,6 +152,7 @@ points(GBR_trap$lon[GBR_trap$local == "Piste de La Glacière"],
 
 #### WORK WITH SHAPEFILES ####
 
+
 # ---- Habitats ---- 
 library('sf')
 # Load the files
@@ -168,14 +169,16 @@ nrow(hab)
 dim(hab)
 
 hab # => all of the metadata and attributes for the shapefile object
+hab_color <- rainbow(n = length(unique(hab$NOM)))
+  
 
 # Plot of the shapefile object with ggplot2
 library(ggplot2)
 
 ggplot() +
   geom_sf(data = hab,
-          color = rainbow(n = length(unique(hab$NOM)))[as.numeric(as.factor(hab$NOM))],
-          fill = rainbow(n = length(unique(hab$NOM)), alpha = 0.5)[as.numeric(as.factor(hab$NOM))]) +
+          aes(fill = NOM)) +
+  scale_color_manual(values = hab_color) +
   coord_sf()
 
 # Conversion of .txt into shp
@@ -195,10 +198,10 @@ ggplot() +
   geom_sf(data = trap_points) +
   coord_sf()
 
-#### Plot GBR trap points with habitat type ####
-# Coversion of .txt file into sf object
+#### Plot GBR GLOBAL (= Maïdo + GBR) trap points with habitat type ####
+# Conversion of .txt file into sf object
 GBR_trap <- read.table('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_REUN/CATTRAP_GBR_data.txt', h = T, sep = '\t', dec = '.')
-library(sf)
+#library(sf)
 
 GBR_trapPOINTS <- st_as_sf(GBR_trap[!is.na(GBR_trap$lon),],
                            coords = c('lon', 'lat'),
@@ -236,13 +239,13 @@ st_bbox(admin0); st_bbox(admin1); st_bbox(admin2)
 # Plot of the shapefile object with ggplot2
 library(ggplot2)
 
-new_color <- rainbow(n = nrow(admin2), alpha = 0.5)
+admin2_color <- rainbow(n = nrow(admin2), alpha = 0.5)
 ggplot() +
   # geom_sf(data = admin0) +
   # geom_sf(data = admin1) +
   geom_sf(data = admin2,
           aes(fill = NAME_2)) +
-  scale_color_manual(values = new_color) +
+  scale_color_manual(values = admin2_color) +
   geom_sf(data = GBR_trapPOINTS) +
   coord_sf()
 
@@ -294,11 +297,15 @@ CamTrap <- st_as_sf(CamTrap, coords = c('lon', 'lat'), crs = CRS)
 st_crs(CamTrap)
 
 ggplot() +
+  geom_sf(data = hab,
+          # color = rainbow(n = length(unique(hab$NOM)))[as.numeric(as.factor(hab$NOM))],
+          # fill = rainbow(n = length(unique(hab$NOM)), alpha = 0.5)[as.numeric(as.factor(hab$NOM))],
+          aes(color = NOM)) +
   # geom_sf(data = admin2) +
   # geom_sf(data = GBR_data,
   #         size = 4,
   #         aes(color = season_year)) +
-  # scale_color_manual(values = new_color) +
+  scale_color_manual(values = rainbow(n = length(unique(hab$NOM)))) +
   geom_sf(data = CamTrap,
           #shape = 8,
           size = 3,
@@ -313,3 +320,4 @@ nngeo::st_nn(CamTrap, CamTrap, k = 2, returnDist = TRUE)
 nngeo::st_nn(CamTrap[CamTrap$field == 'open',], CamTrap[CamTrap$field == 'open',], k = 2, returnDist = TRUE) 
 
 nngeo::st_nn(CamTrap[CamTrap$field == 'closed',], CamTrap[CamTrap$field == 'closed',], k = 2, returnDist = TRUE) 
+
