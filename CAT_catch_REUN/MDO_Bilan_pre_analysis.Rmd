@@ -21,7 +21,9 @@ camTrap <- read.table('C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/CAT_catch_R
 hab <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Habitats/habitat.shp') # shapefile for habitats
 crs_hab <- st_crs(hab)
 
-site <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Code_site/Code_site.shp') # shapefile for trap areas - created and updated by Yahaia
+# site <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Code_site/Code_site.shp') # old version
+
+site <- st_read('C:/Users/Etudiant/Desktop/SMAC/SPATIAL_data_RUN/Code_site_1/Code_site_1.shp') # shapefile for trap areas - created and updated by Yahaia
 site_color <- rainbow(n = length(unique(site$SITE)))
 
 MDO_shp <- site[site$SITE == 'MDO',]
