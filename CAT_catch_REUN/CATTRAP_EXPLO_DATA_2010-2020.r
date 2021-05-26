@@ -321,3 +321,18 @@ nngeo::st_nn(CamTrap[CamTrap$field == 'open',], CamTrap[CamTrap$field == 'open',
 
 nngeo::st_nn(CamTrap[CamTrap$field == 'closed',], CamTrap[CamTrap$field == 'closed',], k = 2, returnDist = TRUE) 
 
+#### Distance btw cage traps for each season 2010-2015 ####
+
+trap10.15 <- trap_points[trap_points$season_year %in% sort(unique(trap_points$season_year))[1:5],]
+
+cage_dist <- function(x){
+  y <- nngeo::st_nn(x, x, k = 2, returnDist = TRUE) 
+  y <- do.call("rbind", y[[2]])
+  mean(y[,2])
+}
+
+dist10.15 <- tapply(trap10.15$geometry, paste(trap10.15$season, trap10.15$season_year), cage_dist)
+
+mean(dist10.15)
+sd(dist10.15)
+
