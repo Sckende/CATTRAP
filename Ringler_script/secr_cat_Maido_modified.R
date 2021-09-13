@@ -9,11 +9,14 @@
 
 rm(list = ls())
 
-capt <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Capture.txt"
+# capt <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Capture.txt"
+capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Capture.txt"
 
 
-trapfile1 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_OPEN.txt"
-trapfile2 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_CLOSED.txt"
+# trapfile1 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_OPEN.txt"
+trapfile1 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_OPEN.txt"
+# trapfile2 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_CLOSED.txt"
+trapfile2 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_CLOSED.txt"
 
 Ha <- maptools::readShapeSpatial("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/Habitat")
 
@@ -217,7 +220,7 @@ Mcat14 <- secr.fit(cat_maido,
 
 AIC(Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
 # best model...Mcat04 & Mcat06
-# graph proba de detection vs distance au centre d'activit?/domaine vital
+# graph proba de detection vs distance au centre d'activite/domaine vital
 par(mfrow = c(1, 2))
 plot(Mcat04,xval=0:2000)
 plot(Mcat06, xval=0:2000, col = "blue")
@@ -227,7 +230,7 @@ plot(Mcat06, xval=0:2000, col = "blue")
 
 secr::model.average(Mcat04, Mcat06)
 
-#### HR computation with medel averaged estimates ####
+#### HR computation with model averaged estimates ####
 
 # SIGMA
 #                 estimate      lcl      ucl

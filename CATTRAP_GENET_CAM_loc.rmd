@@ -1,0 +1,34 @@
+---
+title: "CATTRAP"
+author: "CCJ"
+date: "13/09/2021"
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE}
+library('mapview')
+library('leaflet')
+library('leafpop')
+library('sf')
+library('sp')
+library('lubridate')
+library('dplyr')
+
+loc <- read.table('C:/Users/ccjuhasz/Desktop/CATTRAP_GENET_CAM_loc.txt',
+                  sep = '\t',
+                  dec = ',',
+                  h = T)
+# Spatial object conversion
+
+# projcrs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+projcrs <- CRS("+init=epsg:32740")
+loc_sp <- sf::st_as_sf(loc,
+                       coords = c('x', 'y'),
+                       crs = projcrs)
+
+mapview(loc_sp,
+        zcol = 'HABITAT',
+        burst = T)
+
+```
+
