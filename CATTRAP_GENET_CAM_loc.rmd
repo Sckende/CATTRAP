@@ -14,7 +14,7 @@ library('sp')
 library('lubridate')
 library('dplyr')
 
-loc <- read.table('C:/Users/ccjuhasz/Desktop/CATTRAP_GENET_CAM_loc.txt',
+loc <- read.table('C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/CATTRAP_GENET_CAM_loc.txt',
                   sep = '\t',
                   dec = ',',
                   h = T)
