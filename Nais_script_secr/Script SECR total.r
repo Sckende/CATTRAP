@@ -3,7 +3,7 @@ rm(list = ls())
 
 library(secr)
 library(maptools)
-setwd("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Nais_script")
+setwd("C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Nais_script_secr")
 
 ##1########## importer les fichiers CMR et TEST separés et tot.....
 ###CMR
@@ -17,7 +17,7 @@ b1 <- read.delim("b1.txt", sep = " ", header = T, colClasses = c("usage" = "char
 
 ###tot
 atot <- read.delim("atot.txt", sep = " ", header = F) # Meme pb que le fichier a1.txt
-atot_cor <- read.delim("atot_cor.txt", sep = "\t", header = T)
+# atot_cor <- read.delim("atot_cor.txt", sep = "\t", header = T)
 
 btot <- read.delim("btot.txt", sep = " ", header = T, colClasses = c("usage" = "character"))
 
@@ -34,8 +34,8 @@ read.capthist("atot.txt","btot.txt",detector ="count",noccasions=63)->dtot
 
 ##3##### Rajouter les mask et buffer
 ###Pour CMR, d avec buffer=1000
-Ha<- readShapeSpatial ('Habitat')
-ovtrap <-traps(d)
+Ha <- sf::st_read('C:/Users/ccjuhasz/Desktop/SMAC/SPATIAL_data_RUN/Habitats/habitat.shp')
+ovtrap <- traps(d)
 ovmask <- make.mask(ovtrap, buffer = 1000, type = "trapbuffer",poly = Ha, keep.poly = FALSE)
 ovmask <- addCovariates(ovmask, Ha)
 

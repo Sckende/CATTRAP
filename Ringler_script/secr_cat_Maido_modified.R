@@ -18,7 +18,7 @@ trapfile1 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_D
 # trapfile2 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_CLOSED.txt"
 trapfile2 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_CLOSED.txt"
 
-Ha <- maptools::readShapeSpatial("C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/Habitat")
+Ha <- sf::st_read('C:/Users/ccjuhasz/Desktop/SMAC/SPATIAL_data_RUN/Habitats/habitat.shp')
 
 library(secr)
 #load(".RData")
@@ -44,7 +44,7 @@ cat_maido <- shareFactorLevels(cat_maido)
 par(mfrow = c(1, 2)); plot(cat_maido, tracks = T)
 
 # Successive trap-revealed movements
-m <-unlist(moves(cat_maido))
+m <- unlist(moves(cat_maido))
 par(mar =c(3.2,4,1,1),mgp =c(2.1,0.6,0))# reduce margins
 hist(m,xlab ="Movement  m",main ="") # majority of movement is done between 0 & 1500 m
 plot(ecdf(m))
@@ -218,7 +218,7 @@ Mcat14 <- secr.fit(cat_maido,
                    buffer = 3000,
                    verify = F)
 
-AIC(Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
+AIC(Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
 # best model...Mcat04 & Mcat06
 # graph proba de detection vs distance au centre d'activite/domaine vital
 par(mfrow = c(1, 2))
