@@ -3,4 +3,12 @@
 .Rhistory
 .RData
 .Ruserdata
+*.rds
 Ringler_script/CAM_DATA
+Nais_script_secr/*.txt
+Claire_script_secr/*.txt
+Claire_script_secr/*.rds
+Claire_script_secr/DATA_pour_David
+Claire_script_secr/GLOBAL_option-ABANDONNED/*.txt
+Claire_script_secr/habitat.*
+CAT_catch_REUN/*.txt
