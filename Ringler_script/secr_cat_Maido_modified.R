@@ -10,13 +10,20 @@
 rm(list = ls())
 
 # capt <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Capture.txt"
-capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Capture.txt"
+# capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Capture.txt"
+
+capt <- "C:/Users/ccjuhasz/Desktop/ex-GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Capture.txt"
 
 
 # trapfile1 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_OPEN.txt"
-trapfile1 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_OPEN.txt"
+# trapfile1 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_OPEN.txt"
+
+trapfile1 <- "C:/Users/ccjuhasz/Desktop/ex-GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_OPEN.txt"
 # trapfile2 <- "C:/Users/Etudiant/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_CLOSED.txt"
-trapfile2 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_CLOSED.txt"
+# trapfile2 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_CLOSED.txt"
+
+
+trapfile2 <- "C:/Users/ccjuhasz/Desktop/ex-GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_CLOSED.txt"
 
 Ha <- sf::st_read('C:/Users/ccjuhasz/Desktop/SMAC/SPATIAL_data_RUN/Habitats/habitat.shp')
 
@@ -232,28 +239,47 @@ secr::model.average(Mcat04, Mcat06)
 
 #### HR computation with model averaged estimates ####
 
-# SIGMA
-#                 estimate      lcl      ucl
-# session=CLOSED 684.9466     365.5407 1283.446
-# session=OPEN   876.3692     601.0967 1277.703
+# , , D
+# 
+#                estimate  SE.estimate         lcl         ucl
+# session=CLOSED 0.001964274 0.0006359135 0.001057965 0.003646972
+# session=OPEN   0.001964274 0.0006359135 0.001057965 0.003646972
+# 
+# , , g0
+# 
+#                estimate SE.estimate        lcl       ucl
+# session=CLOSED 0.09725803  0.02416834 0.05910105 0.1559665
+# session=OPEN   0.09725803  0.02416834 0.05910105 0.1559665
+# 
+# , , sigma
+# 
+#                estimate SE.estimate      lcl      ucl
+# session=CLOSED 738.6990    231.6811 405.2647 1346.469
+# session=OPEN   891.7458    176.9252 606.7187 1310.674
+# 
+# , , z
+# 
+#                estimate SE.estimate      lcl     ucl
+# session=CLOSED 3.832701   0.7065848 2.678486 5.48429
+# session=OPEN   3.832701   0.7065848 2.678486 5.48429
 
 # ----- CLOSED AREA -----#
 # Home range 95% and 50%
 HR95clo <- 3.14*((circular.r(p = 0.95,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.52)))*684.9466)^2
-# HR95closed = 9 694 058 m2 = 9.70 km2
+                          detectpar = list(sigma = 1, z = 3.83)))*738.6990)^2
+# HR95closed = 6 827 860 m2 = 6.83 km2
 HR50clo <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.52)))*684.9466)^2
-# HR50closed = 468 275.6 m2 = 0.50 km2
+                          detectpar = list(sigma = 1, z = 3.83)))*738.6990)^2
+# HR50closed = 551 260.9 m2 = 0.55 km2
 
 # ----- OPEN AREA -----#
 HR95op <- 3.14*((circular.r(p = 0.95,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.52)))*876.3692)^2
-# HR95open = 15 869 615 m2 = 15.70 km2
+                          detectpar = list(sigma = 1, z = 3.83)))*891.7458)^2
+# HR95open = 9 950 198 m2 = 9.65 km2 (ex value 15.70 km2)
 HR50op <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HR', # hazard rate
-                          detectpar = list(sigma = 1, z = 3.52)))*876.3692)^2
-# HR50open = 766 588.5 m2 = 7.70 km2
+                          detectpar = list(sigma = 1, z = 3.83)))*891.7458)^2
+# HR50open = 803 349.2 m2 = 0.80 km2

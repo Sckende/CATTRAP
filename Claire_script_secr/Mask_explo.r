@@ -1,6 +1,7 @@
 # ---------------------------------------------------- #
 #### Creation and test a new mask in SECR analyses ####
 # -------------------------------------------------- #
+rm(list = ls())
 
 library(sf)
 library(mapview)
@@ -80,10 +81,12 @@ mapview(nbg.sp)
 
 #### Test of the new MASK ####
 
+library(secr)
+
 # -----> Loading data
-capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Capture.txt"
-trapfile1 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_OPEN.txt"
-trapfile2 <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Ringler_script/CAM_DATA/Trap_MULTI-SESSION_CLOSED.txt"
+capt <- "C:/Users/ccjuhasz/Desktop/ex-GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Capture.txt"
+trapfile1 <- "C:/Users/ccjuhasz/Desktop/ex-GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_OPEN.txt"
+trapfile2 <- "C:/Users/ccjuhasz/Desktop/ex-GITHUB/CATTRAP/Claire_script_secr/DATA_pour_David/Trap_MULTI-SESSION_CLOSED.txt"
 
 cat_maido <- read.capthist(capt,c(trapfile2, trapfile1),
                            fmt = "trapID",
@@ -126,9 +129,10 @@ Mcat02 <- secr.fit(cat_maido,
                    CL = F,
                    mask = cat_mask,
                    verify = F)
-# D ~ 0.21, 0.17
-# g0 ~ 0,08
-# sigma ~ 820
+# D ~ 0.0024/ha (CLOSED), 0.0018/ha (OPEN)(*100 for conversion in km2)
+# g0 ~ 0.096
+# sigma ~ 848
+# z ~ 3.95
 
 Mcat04 <- secr.fit(cat_maido,
                    model = list(D~1, g0~1, sigma~1, z~1),
@@ -136,10 +140,10 @@ Mcat04 <- secr.fit(cat_maido,
                    CL = F,
                    mask = cat_mask,
                    verify = T)
-# D ~ 0.19/km2
-# g0 ~ 0,08
+# D ~ 0.0021/ha = 0.21/km2
+# g0 ~ 0.096
 # sigma ~ 820m
-# z ~ 3.88
+# z ~ 3.94
 
 Mcat05 <- secr.fit(cat_maido,
                    model = list(D~1, g0~session, sigma~1, z~1),
@@ -155,10 +159,10 @@ Mcat06 <- secr.fit(cat_maido,
                    CL = F,
                    mask = cat_mask,
                    verify = F)
-# D ~ 0.19
-# g0 ~ 0,10
-# sigma ~ 533 (CLOSED) / 913 (OPEN)
-# z = 
+# D ~ 0.0028/ha
+# g0 ~ 0.094
+# sigma ~ 545 (CLOSED) / 898 (OPEN)
+# z ~ 3.55 
 
 Mcat07 <- secr.fit(cat_maido,
                    model = list(D~1, g0~session, sigma~session, z~1),
@@ -217,3 +221,35 @@ Mcat14 <- secr.fit(cat_maido,
                    verify = F)
 
 AIC(Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
+
+#### Model averaging ####
+
+secr::model.average(Mcat04, Mcat06)
+
+#### HR computation with model averaged estimates ####
+
+# SIGMA
+#                estimate SE.estimate      lcl      ucl
+# session=CLOSED 725.0293    221.0986 404.1375 1300.714
+# session=OPEN   862.9586    158.8168 603.4477 1234.072
+
+# ----- CLOSED AREA -----#
+# Home range 95% and 50%
+HR95clo <- 3.14*((circular.r(p = 0.95,
+                             detectfn = 'HR', # hazard rate
+                             detectpar = list(sigma = 1, z = 3.75)))*725.0293)^2
+# HR95closed = 7 335 498 m2 = 7.34 km2
+HR50clo <- 3.14*((circular.r(p = 0.5,
+                             detectfn = 'HR', # hazard rate
+                             detectpar = list(sigma = 1, z = 3.75)))*725.0293)^2
+# HR50closed = 528 010.4 m2 = 0.53 km2
+
+# ----- OPEN AREA -----#
+HR95op <- 3.14*((circular.r(p = 0.95,
+                            detectfn = 'HR', # hazard rate
+                            detectpar = list(sigma = 1, z = 3.75)))*862.9586)^2
+# HR95open = 10 391 983 m2 = 10.39 km2
+HR50op <- 3.14*((circular.r(p = 0.5,
+                            detectfn = 'HR', # hazard rate
+                            detectpar = list(sigma = 1, z = 3.75)))*862.9586)^2
+# HR50open = 748 016.7 m2 = 0.75 km2
