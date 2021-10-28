@@ -228,28 +228,47 @@ secr::model.average(Mcat04, Mcat06)
 
 #### HR computation with model averaged estimates ####
 
-# SIGMA
+# , , D
+# 
+#                estimate  SE.estimate         lcl         ucl
+# session=CLOSED 0.002176766 0.0006743297 0.001202651 0.003939889
+# session=OPEN   0.002176766 0.0006743297 0.001202651 0.003939889
+# 
+# , , g0
+# 
+#                estimate SE.estimate        lcl       ucl
+# session=CLOSED 0.09540967  0.02361477 0.05810855 0.1527715
+# session=OPEN   0.09540967  0.02361477 0.05810855 0.1527715
+# 
+# , , sigma
+# 
 #                estimate SE.estimate      lcl      ucl
-# session=CLOSED 725.0293    221.0986 404.1375 1300.714
-# session=OPEN   862.9586    158.8168 603.4477 1234.072
+# session=CLOSED 716.2983    221.6898 395.9619 1295.790
+# session=OPEN   866.6064    159.7289 605.6767 1239.946
+# 
+# , , z
+# 
+#                estimate SE.estimate      lcl      ucl
+# session=CLOSED 3.789854   0.6802843 2.673254 5.372849
+# session=OPEN   3.789854   0.6802843 2.673254 5.372849
 
 # ----- CLOSED AREA -----#
 # Home range 95% and 50%
 HR95clo <- 3.14*((circular.r(p = 0.95,
                              detectfn = 'HR', # hazard rate
-                             detectpar = list(sigma = 1, z = 3.75)))*725.0293)^2
-# HR95closed = 7 335 498 m2 = 7.34 km2
+                             detectpar = list(sigma = 1, z = 3.79)))*716.2983)^2
+# HR95closed = 6 785 316 m2 = 6.79 km2
 HR50clo <- 3.14*((circular.r(p = 0.5,
                              detectfn = 'HR', # hazard rate
-                             detectpar = list(sigma = 1, z = 3.75)))*725.0293)^2
-# HR50closed = 528 010.4 m2 = 0.53 km2
+                             detectpar = list(sigma = 1, z = 3.79)))*716.2983)^2
+# HR50closed = 516 750.1 m2 = 0.52 km2
 
 # ----- OPEN AREA -----#
 HR95op <- 3.14*((circular.r(p = 0.95,
                             detectfn = 'HR', # hazard rate
-                            detectpar = list(sigma = 1, z = 3.75)))*862.9586)^2
-# HR95open = 10 391 983 m2 = 10.39 km2
+                            detectpar = list(sigma = 1, z = 3.79)))*866.6064)^2
+# HR95open = 9 931 756 m2 = 9.93 km2
 HR50op <- 3.14*((circular.r(p = 0.5,
                             detectfn = 'HR', # hazard rate
-                            detectpar = list(sigma = 1, z = 3.75)))*862.9586)^2
-# HR50open = 748 016.7 m2 = 0.75 km2
+                            detectpar = list(sigma = 1, z = 3.79)))*866.6064)^2
+# HR50open = 756 373.8 m2 = 0.76 km2
