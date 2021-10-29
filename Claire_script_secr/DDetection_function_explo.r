@@ -1,3 +1,5 @@
+# Lors de la comparaison de deux modèles nuls avec hazard rate vs. halfnormal, le meilleur modèle est celui avec hazard rate
+# MAIS si le même excercice avec les modèles complets (toutes les variables qui varient en fonction de la session), alors halfnormal est la fonction de détection qui est sélectionnée.
 # -----> All models with mask
 
 Mcat02 <- secr.fit(cat_maido,
