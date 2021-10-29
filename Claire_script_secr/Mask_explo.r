@@ -224,29 +224,138 @@ AIC(Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13
 
 #### Model averaging ####
 
-secr::model.average(Mcat04, Mcat06)
+av <- secr::model.average(Mcat04, Mcat06)
 
-plot(Mcat04, xval = 0:3000)
+# ---- #
+pp1 <- plot(Mcat04, limits = T, xval = 0:3000)
 
-p <- plot(Mcat06, xval = 0:3000)
-plot(p$`session = CLOSED`, type = 'l', col = 'darkgreen', bty = 'n')
-lines(p$`session = OPEN`, type = 'l', col = 'darkorange')
+# png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Mcat04_Detection_prob.tiff",
+#     res = 300,
+#     width = 45,
+#     height = 30,
+#     pointsize = 12,
+#     unit = "cm",
+#     bg = "transparent")
+# 
+# plot(pp1$`session = CLOSED`$x,
+#      pp1$`session = CLOSED`$ucl,
+#      bty = 'n',
+#      type = 'l',
+#      lty = 'dotted',
+#      xlab = 'Distance (m)',
+#      ylab = 'Detection probability',
+#      lwd = 2,
+#      cex.lab = 1.5,
+#      cex.axis = 1.5)
+# lines(pp1$`session = CLOSED`$x,
+#       pp1$`session = CLOSED`$y,
+#       lty = 'solid',
+#       lwd = 2)
+# lines(pp1$`session = CLOSED`$x,
+#       pp1$`session = CLOSED`$lcl,
+#       lty = 'dotted',
+#       lwd = 2)
+# 
+# dev.off()
+
+# ---- #
+pp2 <-plot(Mcat06, limit = T, xval = 0:3000)
+
+# png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Mcat06_BOTH_Detection_probs.tiff",
+#     res = 300,
+#     width = 45,
+#     height = 30,
+#     pointsize = 12,
+#     unit = "cm",
+#     bg = "transparent")
+# 
+# plot(pp2$`session = CLOSED`$x,
+#      pp2$`session = CLOSED`$ucl,
+#      bty = 'n',
+#      type = 'l',
+#      lty = 'dotted',
+#      xlab = 'Distance (m)',
+#      ylab = 'Detection probability',
+#      lwd = 2,
+#      cex.lab = 1.5,
+#      cex.axis = 1.5)
+# lines(pp2$`session = CLOSED`$x,
+#       pp2$`session = CLOSED`$y,
+#       lty = 'solid',
+#       lwd = 2)
+# lines(pp2$`session = CLOSED`$x,
+#       pp2$`session = CLOSED`$lcl,
+#       lty = 'dotted',
+#       lwd = 2)
+# 
+# dev.off()
+# png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Mcat06_OPEN_Detection_prob.tiff",
+#     res = 300,
+#     width = 45,
+#     height = 30,
+#     pointsize = 12,
+#     unit = "cm",
+#     bg = "transparent")
+# 
+# lines(pp2$`session = OPEN`$x,
+#      pp2$`session = OPEN`$ucl,
+#      bty = 'n',
+#      type = 'l',
+#      lty = 'dotted',
+#      xlab = 'Distance (m)',
+#      ylab = 'Detection probability',
+#      lwd = 2,
+#      cex.lab = 1.5,
+#      cex.axis = 1.5,
+#      col = 'darkgrey')
+# lines(pp2$`session = OPEN`$x,
+#       pp2$`session = OPEN`$y,
+#       lty = 'solid',
+#       lwd = 2,
+#       col = 'darkgrey')
+# lines(pp2$`session = OPEN`$x,
+#       pp2$`session = OPEN`$lcl,
+#       lty = 'dotted',
+#       lwd = 2,
+#       col = 'darkgrey')
+# 
+# dev.off()
+
+# Trend in the detection probability with the distance (d)
+
+g0 <- 0.09540968
+d <- 0:3000
+sigma.closed <- 716.2983
+sigma.open <- 866.6064
+z <- 3.789854
+
+y.closed <- g0*(1 - exp(-(d/sigma.closed)^(-z)))
+y.open <- g0*(1 - exp(-(d/sigma.open)^(-z)))
+
+Est <- data.frame(dist = d, closed = y.closed, open = y.open) 
+head(Est)
+
+plot(Est$dist,
+     Est$closed, type = 'l', col = 'darkgreen', bty = 'n', xpd = T)
+axis(2, seq(0, 0.10, 0.01))
+lines(Est$dist, Est$open, type = 'l', col = 'darkorange')
 
 # Valeur de sigma pour une diminution de la proba max de capture de 10%
-p.max <- max(p$`session = CLOSED`$y)
+max(Est$closed) == max(Est$open)
+p.max <- max(Est$closed)
 p.max10 <- p.max - ((p.max*10)/100)
 p.max5 <- p.max - ((p.max*5)/100)
 p.max1 <- p.max - ((p.max*1)/100)
 
 # DISTANCE MAX FOR MAXIMAL DETECTION IN CLOSED AREA
-d.closed10 <- max(p$`session = CLOSED`$x[p$`session = CLOSED`$y >= p.max10]) # 431 m
-d.closed5 <- max(p$`session = CLOSED`$x[p$`session = CLOSED`$y >= p.max5]) # 400 m
-d.closed1 <- max(p$`session = CLOSED`$x[p$`session = CLOSED`$y >= p.max1]) # 354 m
+d.closed10 <- max(Est$dist[Est$closed >= p.max10]) # 574 m
+d.closed5 <- max(Est$dist[Est$closed >= p.max5]) # 536 m
+d.closed1 <- max(Est$dist[Est$closed >= p.max1]) # 478 m
 
 # DISTANCE MAX FOR MAXIMAL DETECTION IN OPEN AREA
-d.open10 <- max(p$`session = OPEN`$x[p$`session = OPEN`$y >= p.max10]) # 710 m
-d.open5 <- max(p$`session = OPEN`$x[p$`session = OPEN`$y >= p.max5]) # 659 m
-d.open1 <- max(p$`session = OPEN`$x[p$`session = OPEN`$y >= p.max1]) # 584 m
+d.open10 <- max(Est$dist[Est$open >= p.max10]) # 695 m
+d.open5 <- max(Est$dist[Est$open >= p.max5]) # 648 m
+d.open1 <- max(Est$dist[Est$open >= p.max1]) # 579 m
 
 # Adding on the plot
 abline(v = d.closed10, col = 'darkgreen', lty = 'dotted')
@@ -267,8 +376,6 @@ height = 35,
 pointsize = 12,
 unit = "cm",
 bg = "transparent")
-
-par(mar = c(5, 6, 5, 1))
 
 plot(p$`session = CLOSED`,
      type = 'l',
