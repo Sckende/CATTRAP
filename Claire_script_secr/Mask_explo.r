@@ -232,8 +232,104 @@ p <- plot(Mcat06, xval = 0:3000)
 plot(p$`session = CLOSED`, type = 'l', col = 'darkgreen', bty = 'n')
 lines(p$`session = OPEN`, type = 'l', col = 'darkorange')
 
-abline(v = 350, col = 'darkgrey', lty = 'dashed')
-abline(v = 550, col = 'darkgrey', lty = 'dashed')
+# Valeur de sigma pour une diminution de la proba max de capture de 10%
+p.max <- max(p$`session = CLOSED`$y)
+p.max10 <- p.max - ((p.max*10)/100)
+p.max5 <- p.max - ((p.max*5)/100)
+p.max1 <- p.max - ((p.max*1)/100)
+
+# DISTANCE MAX FOR MAXIMAL DETECTION IN CLOSED AREA
+d.closed10 <- max(p$`session = CLOSED`$x[p$`session = CLOSED`$y >= p.max10]) # 431 m
+d.closed5 <- max(p$`session = CLOSED`$x[p$`session = CLOSED`$y >= p.max5]) # 400 m
+d.closed1 <- max(p$`session = CLOSED`$x[p$`session = CLOSED`$y >= p.max1]) # 354 m
+
+# DISTANCE MAX FOR MAXIMAL DETECTION IN OPEN AREA
+d.open10 <- max(p$`session = OPEN`$x[p$`session = OPEN`$y >= p.max10]) # 710 m
+d.open5 <- max(p$`session = OPEN`$x[p$`session = OPEN`$y >= p.max5]) # 659 m
+d.open1 <- max(p$`session = OPEN`$x[p$`session = OPEN`$y >= p.max1]) # 584 m
+
+# Adding on the plot
+abline(v = d.closed10, col = 'darkgreen', lty = 'dotted')
+abline(v = d.open10, col = 'darkorange', lty = 'dotted')
+# ----- #
+abline(v = d.closed5, col = 'darkgreen', lty = 'dashed')
+abline(v = d.open5, col = 'darkorange', lty = 'dashed')
+# ----- #
+abline(v = d.closed1, col = 'darkgreen', lty = 'twodash')
+abline(v = d.open1, col = 'darkorange', lty = 'twodash')
+
+# Figure for paper
+
+png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Detection_probs.tiff",
+res = 300,
+width = 45,
+height = 35,
+pointsize = 12,
+unit = "cm",
+bg = "transparent")
+
+par(mar = c(5, 6, 5, 1))
+
+plot(p$`session = CLOSED`,
+     type = 'l',
+     col = 'black',
+     bty = 'n',
+     xlab = 'Distance (m)',
+     ylab = '',
+     yaxt = 'n',
+     cex.lab = 1.5,
+     cex.axis = 1.5,
+     lwd = 2)
+
+axis(2, seq(0, 0.10, 0.01), las = 2, xpd = T, cex.axis = 1.5)
+
+lines(p$`session = OPEN`, type = 'l', col = 'darkgrey', lwd = 2)
+mtext('Detection probability', 2, line = 4.5, cex = 1.5)
+
+abline(v = d.closed10, col = 'black', lty = 'dotted', lwd = 2)
+abline(v = d.open10, col = 'darkgrey', lty = 'dotted', lwd = 2)
+# ----- #
+abline(v = d.closed5, col = 'black', lty = 'dashed', lwd = 2)
+abline(v = d.open5, col = 'darkgrey', lty = 'dashed', lwd = 2)
+# ----- #
+abline(v = d.closed1, col = 'black', lty = 'twodash', lwd = 2)
+abline(v = d.open1, col = 'darkgrey', lty = 'twodash', lwd = 2)
+
+legend (x = 2500,
+        y = 0.085,
+        # title = "Vegetated cover",
+        lty = c('dotted', 'dashed', 'twodash'),
+        lwd = 2,
+        legend = c('10%', '5%', '1%'),
+        bty = 'n',
+        col = 'black',
+        cex = 2,
+        xjust = 0)
+
+text(x = 2500,
+     y = 0.080,
+     adj = c(0, 0),
+     'Vegetated cover',
+     cex = 2)
+
+legend (x = 2500,
+        y = 0.05,
+        # title = "Trail",
+        lty = c('dotted', 'dashed', 'twodash'),
+        lwd = 2,
+        legend = c('10%', '5%', '1%'),
+        bty = 'n',
+        col = 'darkgrey',
+        cex = 2,
+        xjust = 0)
+
+text(x = 2500,
+     y = 0.045,
+     adj = c(0, 0),
+     'Trail',
+     cex = 2)
+
+dev.off()
 
 #### HR computation with model averaged estimates ####
 
