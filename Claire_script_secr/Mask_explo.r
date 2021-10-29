@@ -226,6 +226,15 @@ AIC(Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13
 
 secr::model.average(Mcat04, Mcat06)
 
+plot(Mcat04, xval = 0:3000)
+
+p <- plot(Mcat06, xval = 0:3000)
+plot(p$`session = CLOSED`, type = 'l', col = 'darkgreen', bty = 'n')
+lines(p$`session = OPEN`, type = 'l', col = 'darkorange')
+
+abline(v = 350, col = 'darkgrey', lty = 'dashed')
+abline(v = 550, col = 'darkgrey', lty = 'dashed')
+
 #### HR computation with model averaged estimates ####
 
 # , , D
