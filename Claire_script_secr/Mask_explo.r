@@ -336,8 +336,9 @@ Est <- data.frame(dist = d, closed = y.closed, open = y.open)
 head(Est)
 
 plot(Est$dist,
-     Est$closed, type = 'l', col = 'darkgreen', bty = 'n', xpd = T)
-axis(2, seq(0, 0.10, 0.01))
+     Est$closed, type = 'l', col = 'darkgreen', bty = 'n', xpd = T, yaxt = 'n', ylab = '', xlab = 'Distance (m)', cex.lab = 1.5, cex.axis = 1.5)
+text(x = -100, y = 0.12, 'Detection probability', xpd = T, cex = 1.5)
+axis(2, seq(0, 0.11, 0.01), las = 2, xpd = T, cex.axis = 1.5, cex.lab = 1.5)
 lines(Est$dist, Est$open, type = 'l', col = 'darkorange')
 
 # Valeur de sigma pour une diminution de la proba max de capture de 10%
@@ -369,30 +370,21 @@ abline(v = d.open1, col = 'darkorange', lty = 'twodash')
 
 # Figure for paper
 
-png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Detection_probs.tiff",
-res = 300,
-width = 45,
-height = 35,
-pointsize = 12,
-unit = "cm",
-bg = "transparent")
+# png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Estimates_Detection_probs.tiff",
+# res = 300,
+# width = 45,
+# height = 30,
+# pointsize = 12,
+# unit = "cm",
+# bg = "transparent")
 
-plot(p$`session = CLOSED`,
-     type = 'l',
-     col = 'black',
-     bty = 'n',
-     xlab = 'Distance (m)',
-     ylab = '',
-     yaxt = 'n',
-     cex.lab = 1.5,
-     cex.axis = 1.5,
-     lwd = 2)
+plot(Est$dist,
+     Est$closed, type = 'l', col = 'black', bty = 'n', xpd = T, yaxt = 'n', ylab = '', xlab = 'Distance (m)', cex.lab = 1.5, cex.axis = 1.5, lwd = 2)
+text(x = -30, y = 0.105, 'Detection probability', xpd = T, cex = 1.5)
+axis(2, seq(0, 0.10, 0.01), las = 2, xpd = T, cex.axis = 1.5, cex.lab = 1.5)
+lines(Est$dist, Est$open, type = 'l', col = 'darkgrey', lwd = 2)
 
-axis(2, seq(0, 0.10, 0.01), las = 2, xpd = T, cex.axis = 1.5)
-
-lines(p$`session = OPEN`, type = 'l', col = 'darkgrey', lwd = 2)
-mtext('Detection probability', 2, line = 4.5, cex = 1.5)
-
+# Adding on the plot
 abline(v = d.closed10, col = 'black', lty = 'dotted', lwd = 2)
 abline(v = d.open10, col = 'darkgrey', lty = 'dotted', lwd = 2)
 # ----- #
@@ -402,41 +394,16 @@ abline(v = d.open5, col = 'darkgrey', lty = 'dashed', lwd = 2)
 abline(v = d.closed1, col = 'black', lty = 'twodash', lwd = 2)
 abline(v = d.open1, col = 'darkgrey', lty = 'twodash', lwd = 2)
 
-legend (x = 2500,
-        y = 0.085,
-        # title = "Vegetated cover",
-        lty = c('dotted', 'dashed', 'twodash'),
-        lwd = 2,
-        legend = c('10%', '5%', '1%'),
-        bty = 'n',
-        col = 'black',
-        cex = 2,
-        xjust = 0)
+legend(x = 2000,
+       y = 0.10,
+       legend = c('1 %', '5 %', '10 %'),
+       lty = c('twodash', 'dashed', 'dotted'),
+       lwd = 2,
+       bty = 'n',
+       cex = 1.5,
+       title = 'Treshold of detection probability')
 
-text(x = 2500,
-     y = 0.080,
-     adj = c(0, 0),
-     'Vegetated cover',
-     cex = 2)
-
-legend (x = 2500,
-        y = 0.05,
-        # title = "Trail",
-        lty = c('dotted', 'dashed', 'twodash'),
-        lwd = 2,
-        legend = c('10%', '5%', '1%'),
-        bty = 'n',
-        col = 'darkgrey',
-        cex = 2,
-        xjust = 0)
-
-text(x = 2500,
-     y = 0.045,
-     adj = c(0, 0),
-     'Trail',
-     cex = 2)
-
-dev.off()
+# dev.off()
 
 #### HR computation with model averaged estimates ####
 
