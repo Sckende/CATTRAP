@@ -65,6 +65,14 @@ st_crs(bob2)
 bob2 <- st_transform(bob2, 32740)
 
 new_grid_buffer <- st_intersection(bob2, grid_buffer)
+
+# Area of the new buffered grid
+
+area <- st_area(new_grid_buffer) # in m2
+area/1000000 # in km2
+sqrt(area/1000000) # 7.8km x 7.8km
+
+
 mapview(new_grid_buffer) + mapview(grid_buffer)
 
 mapview(new_grid_buffer) + mapview(grid.sp)
@@ -105,30 +113,30 @@ plot(cat_mask)
 
 # -----> Comparaison betw model with buffer and model with mask
 # hazard rate dfn
-MtestBuf <- secr.fit(cat_maido,
-                    model = list(D~1, g0~1, sigma~1),
-                    detectfn = 1, # hazard rate
-                    CL = F,
-                    buffer = 3000,
-                    verify = F)
-
-MtestMask <- secr.fit(cat_maido,
-                     model = list(D~1, g0~1, sigma~1),
-                     detectfn = 1, # hazard rate
-                     CL = F,
-                     mask = cat_mask,
-                     verify = F)
-
-AIC(MtestBuf, MtestMask)
+# MtestBuf <- secr.fit(cat_maido,
+#                     model = list(D~1, g0~1, sigma~1),
+#                     detectfn = 1, # hazard rate
+#                     CL = F,
+#                     buffer = 3000,
+#                     verify = F)
+# 
+# MtestMask <- secr.fit(cat_maido,
+#                      model = list(D~1, g0~1, sigma~1),
+#                      detectfn = 1, # hazard rate
+#                      CL = F,
+#                      mask = cat_mask,
+#                      verify = F)
+# 
+# AIC(MtestBuf, MtestMask)
 
 # -----> All models with mask
 
-Mcat02 <- secr.fit(cat_maido,
-                   model = list(D~session, g0~1, sigma~1, z~1),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
+# Mcat02 <- secr.fit(cat_maido,
+#                    model = list(D~session, g0~1, sigma~1, z~1),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
 # D ~ 0.0024/ha (CLOSED), 0.0018/ha (OPEN)(*100 for conversion in km2)
 # g0 ~ 0.096
 # sigma ~ 848
@@ -145,12 +153,12 @@ Mcat04 <- secr.fit(cat_maido,
 # sigma ~ 820m
 # z ~ 3.94
 
-Mcat05 <- secr.fit(cat_maido,
-                   model = list(D~1, g0~session, sigma~1, z~1),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
+# Mcat05 <- secr.fit(cat_maido,
+#                    model = list(D~1, g0~session, sigma~1, z~1),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
 
 
 Mcat06 <- secr.fit(cat_maido,
@@ -164,61 +172,61 @@ Mcat06 <- secr.fit(cat_maido,
 # sigma ~ 545 (CLOSED) / 898 (OPEN)
 # z ~ 3.55 
 
-Mcat07 <- secr.fit(cat_maido,
-                   model = list(D~1, g0~session, sigma~session, z~1),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat08 <- secr.fit(cat_maido,
-                   model = list(D~1, g0~1, sigma~session, z~session),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat09 <- secr.fit(cat_maido,
-                   model = list(D~1, g0~1, sigma~1, z~session),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat10 <- secr.fit(cat_maido,
-                   model = list(D~1, g0~session, sigma~1, z~session),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat11 <- secr.fit(cat_maido,
-                   model = list(D~1, g0~session, sigma~session, z~session),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat12 <- secr.fit(cat_maido,
-                   model = list(D~session, g0~session, sigma~session, z~session),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat13 <- secr.fit(cat_maido,
-                   model = list(D~session, g0~session, sigma~1, z~1),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
-
-Mcat14 <- secr.fit(cat_maido,
-                   model = list(D~session, g0~1, sigma~1, z~1),
-                   detectfn = 1, # hazard rate
-                   CL = F,
-                   mask = cat_mask,
-                   verify = F)
+# Mcat07 <- secr.fit(cat_maido,
+#                    model = list(D~1, g0~session, sigma~session, z~1),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat08 <- secr.fit(cat_maido,
+#                    model = list(D~1, g0~1, sigma~session, z~session),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat09 <- secr.fit(cat_maido,
+#                    model = list(D~1, g0~1, sigma~1, z~session),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat10 <- secr.fit(cat_maido,
+#                    model = list(D~1, g0~session, sigma~1, z~session),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat11 <- secr.fit(cat_maido,
+#                    model = list(D~1, g0~session, sigma~session, z~session),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat12 <- secr.fit(cat_maido,
+#                    model = list(D~session, g0~session, sigma~session, z~session),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat13 <- secr.fit(cat_maido,
+#                    model = list(D~session, g0~session, sigma~1, z~1),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
+# 
+# Mcat14 <- secr.fit(cat_maido,
+#                    model = list(D~session, g0~1, sigma~1, z~1),
+#                    detectfn = 1, # hazard rate
+#                    CL = F,
+#                    mask = cat_mask,
+#                    verify = F)
 
 AIC(Mcat02,Mcat04,Mcat05,Mcat06,Mcat07,Mcat08,Mcat09,Mcat10,Mcat11,Mcat12,Mcat13,Mcat14)
 
@@ -347,16 +355,25 @@ p.max <- max(Est$closed)
 p.max10 <- p.max - ((p.max*10)/100)
 p.max5 <- p.max - ((p.max*5)/100)
 p.max1 <- p.max - ((p.max*1)/100)
+# ----- #
+p.max25 <- p.max - ((p.max*25)/100)
+p.max50 <- p.max - ((p.max*50)/100)
 
 # DISTANCE MAX FOR MAXIMAL DETECTION IN CLOSED AREA
 d.closed10 <- max(Est$dist[Est$closed >= p.max10]) # 574 m
 d.closed5 <- max(Est$dist[Est$closed >= p.max5]) # 536 m
 d.closed1 <- max(Est$dist[Est$closed >= p.max1]) # 478 m
+# ----- #
+d.closed25 <- max(Est$dist[Est$closed >= p.max25]) # 657 m
+d.closed50 <- max(Est$dist[Est$closed >= p.max50]) # 789 m
 
 # DISTANCE MAX FOR MAXIMAL DETECTION IN OPEN AREA
 d.open10 <- max(Est$dist[Est$open >= p.max10]) # 695 m
 d.open5 <- max(Est$dist[Est$open >= p.max5]) # 648 m
 d.open1 <- max(Est$dist[Est$open >= p.max1]) # 579 m
+# ----- #
+d.open25 <- max(Est$dist[Est$open >= p.max25]) # 795 m
+d.open50 <- max(Est$dist[Est$open >= p.max50]) # 954 m
 
 # Adding on the plot
 abline(v = d.closed10, col = 'darkgreen', lty = 'dotted')
@@ -378,29 +395,30 @@ abline(v = d.open1, col = 'darkorange', lty = 'twodash')
 # unit = "cm",
 # bg = "transparent")
 
+par(mar = c(5.1, 5.1, 4.1, 2.1)) # default mar = c(5.1, 4.1, 4.1, 2.1)
 plot(Est$dist,
-     Est$closed, type = 'l', col = 'black', bty = 'n', xpd = T, yaxt = 'n', ylab = '', xlab = 'Distance (m)', cex.lab = 1.5, cex.axis = 1.5, lwd = 2)
-text(x = -30, y = 0.105, 'Detection probability', xpd = T, cex = 1.5)
-axis(2, seq(0, 0.10, 0.01), las = 2, xpd = T, cex.axis = 1.5, cex.lab = 1.5)
-lines(Est$dist, Est$open, type = 'l', col = 'darkgrey', lwd = 2)
+     Est$closed, type = 'l', col = 'black', bty = 'n', xpd = T, yaxt = 'n', ylab = '', xlab = 'Distance (m)', cex.lab = 2, cex.axis = 2, lwd = 3)
+text(x = -25, y = 0.105, 'Detection probability', xpd = T, cex = 2)
+axis(2, seq(0, 0.10, 0.01), las = 2, xpd = T, cex.axis = 2, cex.lab = 2)
+lines(Est$dist, Est$open, type = 'l', col = 'darkgrey', lwd = 3)
 
 # Adding on the plot
-abline(v = d.closed10, col = 'black', lty = 'dotted', lwd = 2)
-abline(v = d.open10, col = 'darkgrey', lty = 'dotted', lwd = 2)
+abline(v = d.closed50, col = 'black', lty = 'dotted', lwd = 3)
+abline(v = d.open50, col = 'darkgrey', lty = 'dotted', lwd = 3)
 # ----- #
-abline(v = d.closed5, col = 'black', lty = 'dashed', lwd = 2)
-abline(v = d.open5, col = 'darkgrey', lty = 'dashed', lwd = 2)
+abline(v = d.closed25, col = 'black', lty = 'dashed', lwd = 3)
+abline(v = d.open25, col = 'darkgrey', lty = 'dashed', lwd = 3)
 # ----- #
-abline(v = d.closed1, col = 'black', lty = 'twodash', lwd = 2)
-abline(v = d.open1, col = 'darkgrey', lty = 'twodash', lwd = 2)
+abline(v = d.closed1, col = 'black', lty = 'twodash', lwd = 3)
+abline(v = d.open1, col = 'darkgrey', lty = 'twodash', lwd = 3)
 
 legend(x = 2000,
        y = 0.10,
-       legend = c('1 %', '5 %', '10 %'),
+       legend = c('1 %', '25 %', '50 %'),
        lty = c('twodash', 'dashed', 'dotted'),
-       lwd = 2,
+       lwd = 3,
        bty = 'n',
-       cex = 1.5,
+       cex = 2,
        title = 'Treshold of detection probability')
 
 # dev.off()
