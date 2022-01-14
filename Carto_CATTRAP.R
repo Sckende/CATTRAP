@@ -21,7 +21,7 @@ cat <- read.table('C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_pi
 summary(cat)
 
 cat <- cat[!cat$zone == 'TAM',]
-cat$date_capt <- as.POSIXct(cat$date_capt,
+cat$date_capt <- as.Date(cat$date_capt,
                            format = "%d/%m/%Y") # Date format
 
 projUTM <- '+init=epsg:32740'
@@ -34,9 +34,22 @@ map <- mapview(cat.sp,
                cex = 3,
                legend = F)
 
-mapshot(map,
-        'C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/map_test.png')
+# Visualization avec le mask utilisé lors des analyses SECR
+bob2 <- readRDS('C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/CATTRAP_Maido_partiel_limite.rds')[2,]
 
-mapshot(map,
-        file = 'C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/map_test.png',
-        remove_controls = c("homeButton", "layersControl"))
+MAI.cat.sp <- cat.sp[cat.sp$zone == 'MAI',]
+MAI.cat.sp$year <- as.factor(year(MAI.cat.sp$date_capt))
+mapview(MAI.cat.sp) + mapview(bob2)
+mapview(MAI.cat.sp,
+        zcol = 'year',
+        burst = T) + mapview(bob2)
+mapview(MAI.cat.sp[MAI.cat.sp$year == 2015,]) + mapview(bob2)
+
+summary(cat.sp$date_capt[cat.sp$zone == 'MAI'])
+date(cat.sp$date_capt[cat.sp$zone == 'MAI'])
+# mapshot(map,
+#         'C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/map_test.png')
+# 
+# mapshot(map,
+#         file = 'C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/DATA/map_test.png',
+#         remove_controls = c("homeButton", "layersControl"))
