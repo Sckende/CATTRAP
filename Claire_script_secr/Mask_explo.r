@@ -129,6 +129,52 @@ plot(cat_mask)
 # 
 # AIC(MtestBuf, MtestMask)
 
+# -----> Comparaison betw model with different detection function
+# hazard rate dfn
+Mhr <- secr.fit(cat_maido,
+                    model = list(D~1, g0~1, sigma~1),
+                    detectfn = 1, # hazard rate
+                    CL = F,
+                    mask = cat_mask,
+                    verify = F) # -----> the best
+
+Mhn <- secr.fit(cat_maido,
+                     model = list(D~1, g0~1, sigma~1),
+                     detectfn = 0, # halfnormal
+                     CL = F,
+                     mask = cat_mask,
+                     verify = F)
+
+Mhhr <- secr.fit(cat_maido,
+                     model = list(D~1, g0~1, sigma~1),
+                     detectfn = 15, # hazard hazard rate
+                     CL = F,
+                     mask = cat_mask,
+                     verify = F)
+
+
+Mhe <- secr.fit(cat_maido,
+                     model = list(D~1, g0~1, sigma~1),
+                     detectfn = 16, # hazard exponential
+                     CL = F,
+                     mask = cat_mask,
+                     verify = F)
+
+Me <- secr.fit(cat_maido,
+                     model = list(D~1, g0~1, sigma~1),
+                     detectfn = 2, # exponential
+                     CL = F,
+                     mask = cat_mask,
+                     verify = F)
+
+Mhhn <- secr.fit(cat_maido,
+                     model = list(D~1, g0~1, sigma~1),
+                     detectfn = 14, # hazard halfnormal
+                     CL = F,
+                     mask = cat_mask,
+                     verify = F)
+AIC(Mhr, Mhn, Mhhr, Mhe, Me, Mhhn) # --> deltaAIC < 2 : Mhr, puis Mhhr, puis Mhe
+
 # -----> All models with mask
 
 # Mcat02 <- secr.fit(cat_maido,
