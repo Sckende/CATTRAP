@@ -6,6 +6,7 @@ rm(list = ls())
 library(sf)
 library(mapview)
 
+
 #### Exploration ####
 Ha <- sf::st_read('C:/Users/ccjuhasz/Desktop/SMAC/SPATIAL_data_RUN/Habitats/habitat.shp')
 names(Ha); unique(Ha$NOM)
@@ -102,6 +103,9 @@ cat_maido <- read.capthist(capt,c(trapfile2, trapfile1),
                            #trapcovnames=c("device"),
                            detector = "count")
 # -----> Mask definition for analysis
+# it's not necessary to add mask covariates (trails vs vegetation cover for each pixels)
+# since mask covariates are only used for modelling density surfaces (D),
+# not for modelling parameters such as g0, and sigma
 
 plot(traps(cat_maido$OPEN))
 
