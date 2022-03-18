@@ -113,7 +113,7 @@ traps(CM)
 # Selection of the detection function - half-normal vs. hazard rate ####
 ########################################################################
 
-fit0 <- secr::secr.fit(CM1,
+fit0 <- secr::secr.fit(CM,
                        model = list(D~1, g0~1, sigma~1),
                        mask = cat_mask,
                        detectfn = 1, # hazard rate
@@ -142,11 +142,12 @@ AIC(fit0, fit00)
 ###################################################
 # Covariate 'hab_type' (cloded vs. open) effect ####
 ###################################################
-print("fit0")
+print("fit1")
 fit1 <- secr::secr.fit(CM,
                        model = list(D~1, g0~1, sigma~1),
                        mask = cat_mask,
-                       detectfn = 1, # hazard rate
+                       detectfn = 0, # half normal
+                #        detectfn = 1, # hazard rate
                        CL = F,
                        verify = F,
                        details = list(fastproximity = FALSE))
@@ -155,23 +156,28 @@ print("fit2")
 fit2 <- secr::secr.fit(CM,
                        model = list(D~1, g0~hab_type, sigma~1),
                        mask = cat_mask,
-                       detectfn = 1, # hazard rate
+                       detectfn = 0, # half normal
+                #        detectfn = 1, # hazard rate
                        CL = F,
                        verify = F,
                        details = list(fastproximity = FALSE))
+summary(fit2)
 print("fit3")
 fit3 <- secr::secr.fit(CM,
                        model = list(D~1, g0~1, sigma~hab_type),
                        mask = cat_mask,
-                       detectfn = 1, # hazard rate
+                       detectfn = 0, # half normal
+                #        detectfn = 1, # hazard rate
                        CL = F,
                        verify = F,
                        details = list(fastproximity = FALSE))
+summary(fit3)
 print("fit4")
 fit4 <- secr::secr.fit(CM,
                        model = list(D~1, g0~hab_type, sigma~hab_type),
                        mask = cat_mask,
-                       detectfn = 1, # hazard rate
+                       detectfn = 0, # half normal
+                #        detectfn = 1, # hazard rate
                        CL = F,
                        verify = F,
                        details = list(fastproximity = FALSE))
@@ -230,3 +236,111 @@ summary(fit1)
 # z       log 3.835180e+00 6.345192e-01 2.779116e+00 5.292549e+00
 
 # save.image(file = "my_work_space2.RData")
+
+# Suite au problème d'estimation de la variance, utilisation de la fonction "halfnormal"#
+#########################################################################################
+
+#                               model   detectfn npar    logLik     AIC    AICc  dAICc AICcwt
+# fit1               D~1 g0~1 sigma~1 halfnormal    3 -314.6254 635.251 639.251  0.000 0.7641
+# fit2        D~1 g0~hab_type sigma~1 halfnormal    5 -308.3008 626.602 641.602  2.351 0.2359
+# fit3        D~1 g0~1 sigma~hab_type halfnormal    5 -312.3492 634.698 649.698 10.447 0.0000
+# fit4 D~1 g0~hab_type sigma~hab_type halfnormal    7 -305.4191 624.838 680.838 41.587 0.0000
+
+
+summary(fit1)
+# $versiontime
+# [1] "4.4.5, run 10:33:50 18 mars 2022, elapsed 285.91 s"
+
+# $traps
+#  Detector Number  Spacing UsagePct
+#     count     41 126.6491 38.28881
+
+# $capthist
+#  Occasions Detections    Animals  Detectors      Moves
+#         63         60         10         41         33 
+
+# $mask
+#  Cells  Spacing     Area
+#   4102 121.5469 6060.148
+
+# $modeldetails
+#     CL fixed distribution hcov
+#  FALSE  none      poisson
+
+# $AICtable
+#             model   detectfn npar    logLik     AIC    AICc
+#  D~1 g0~1 sigma~1 halfnormal    3 -314.6254 635.251 639.251
+
+# $coef
+#            beta   SE.beta       lcl       ucl
+# D     -6.011508 0.3355610 -6.669196 -5.353821
+# g0    -2.843722 0.2824033 -3.397223 -2.290222
+# sigma  6.878572 0.1047178  6.673329  7.083815
+
+# $predicted
+#        link     estimate  SE.estimate          lcl          ucl
+# D       log   0.00245039 8.459543e-04 1.269419e-03 4.730045e-03
+# g0    logit   0.05500672 1.467960e-02 3.238238e-02 9.193601e-02
+# sigma   log 971.23864923 1.019854e+02 7.910246e+02 1.192510e+03
+
+
+# D ~ 0.25/km2
+# g0 ~ 0.06
+# sigma ~ 971 m
+
+# Home range 95% and 50%
+HR95 <- 3.14*((circular.r(p = 0.95,
+                          detectfn = 'HN', # half-normal
+                          detectpar = list(sigma = 1)))*971)^2
+# HR95 = 7.9 km2
+HR50 <- 3.14*((circular.r(p = 0.5,
+                          detectfn = 'HN', # hazard rate
+                          detectpar = list(sigma = 1)))*971)^2 #sigma = le nombre de fois qu'on multiplie le sigma- circular.r permet de d?terminer un d?multiplicateur 
+
+summary(fit2)
+# $versiontime
+# [1] "4.4.5, run 10:38:36 18 mars 2022, elapsed 1059.48 s"
+
+# $traps
+#  Detector Number  Spacing UsagePct
+#     count     41 126.6491 38.28881
+
+# $capthist
+#  Occasions Detections    Animals  Detectors      Moves
+#         63         60         10         41         33
+
+# $mask
+#  Cells  Spacing     Area
+#   4102 121.5469 6060.148
+
+# $modeldetails
+#     CL fixed distribution hcov
+#  FALSE  none      poisson
+
+# $AICtable
+#                    model   detectfn npar    logLik     AIC    AICc
+#  D~1 g0~hab_type sigma~1 halfnormal    5 -308.3008 626.602 641.602
+
+# $coef
+#                          beta      SE.beta         lcl        ucl
+# D                  -6.0078503 3.353226e-01  -6.6650706  -5.350630
+# g0                 -3.3221975 3.351079e-01  -3.9789970  -2.665398
+# g0.hab_typeclose" -16.3090336 2.103556e-07 -16.3090340 -16.309033
+# g0.hab_typeopen     0.8743071 2.891371e-01   0.3076088   1.441005
+# sigma               6.8720852 1.043943e-01   6.6674762   7.076694
+
+# $predicted
+#        link     estimate  SE.estimate          lcl          ucl
+# D       log 2.459369e-03 8.484166e-04 1.274667e-03 4.745161e-03
+# g0    logit 3.481748e-02 1.126138e-02 1.836096e-02 6.504628e-02
+# sigma   log 9.649586e+02 1.010112e+02 7.864083e+02 1.184048e+03
+
+# save.image(file = "C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/RESULTS/my_work_space3.RData")
+
+##### Distance maximale parcourue ####
+######################################
+MMDM(CM,
+     min.recapt = 1,
+     full = TRUE,
+     userdist = NULL,
+     mask = cat_mask)
