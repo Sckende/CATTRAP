@@ -56,6 +56,9 @@ CM <- secr::read.capthist(capt,
 usage(traps(CM))
 summary(CM)
 summary(traps(CM))
+x11()
+plot(CM,
+     tracks = TRUE)
 
 # -----> Estimated sigma
 est_sig <- RPSV(CM,
