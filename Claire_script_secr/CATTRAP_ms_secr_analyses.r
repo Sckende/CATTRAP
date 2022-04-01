@@ -344,3 +344,132 @@ MMDM(CM,
      full = TRUE,
      userdist = NULL,
      mask = cat_mask)
+
+#### Plot of the modele ####
+############################
+load("C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/RESULTS/my_work_space3.RData")
+plot(fit1,
+     limits = F,
+     xval = 0:3500)
+
+# Trend in the detection probability with the distance (d)
+
+g0 <- 0.05500672
+d <- 0:3500
+sigma <- 971.23864923
+
+# Half-normal detection function
+y <- g0 * exp(- (d^2) / (2 * sigma^2))
+
+Est <- data.frame(dist = d, y = y) 
+head(Est)
+
+plot(Est$dist,
+     Est$y,
+     type = 'l',
+     col = 'darkgreen',
+     bty = 'n',
+     xpd = T,
+     yaxt = 'n',
+     ylab = '',
+     xlab = 'Distance (m)',
+     cex.lab = 1.5,
+     cex.axis = 1.5)
+
+text(x = 100,
+     y = 0.065,
+     'Detection probability',
+     xpd = T,
+     cex = 1.5)
+
+axis(2,
+     seq(0, 0.06, 0.01),
+     las = 2,
+     xpd = T,
+     cex.axis = 1.5,
+     cex.lab = 1.5)
+
+# Valeur de sigma pour une diminution de la proba max de capture de 10%
+p.max <- max(Est$y)
+p.max10 <- p.max - ((p.max*10)/100)
+p.max5 <- p.max - ((p.max*5)/100)
+p.max1 <- p.max - ((p.max*1)/100)
+# ----- #
+p.max25 <- p.max - ((p.max*25)/100)
+p.max50 <- p.max - ((p.max*50)/100)
+
+# DISTANCE MAX FOR MAXIMAL DETECTION IN CLOSED AREA
+d.10 <- max(Est$dist[Est$y >= p.max10]) # 445 m
+d.5 <- max(Est$dist[Est$y >= p.max5]) # 311 m
+d.1 <- max(Est$dist[Est$y >= p.max1]) # 137 m
+# ----- #
+d.25 <- max(Est$dist[Est$y >= p.max25]) # 736 m
+d.50 <- max(Est$dist[Est$y >= p.max50]) # 1143 m
+
+# Adding on the plot
+abline(v = d.10, col = 'darkgreen', lty = 'dotted')
+# ----- #
+abline(v = d.5, col = 'darkgreen', lty = 'dashed')
+# ----- #
+abline(v = d.1, col = 'darkgreen', lty = 'twodash')
+# ----- #
+abline(v = d.25, col = '#e98f53', lty = 'twodash')
+# ----- #
+abline(v = d.50, col = '#c90808', lty = 'twodash')
+
+# Figure for paper
+
+png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Estimates_Detection_probs_GLOBAL.tiff",
+res = 300,
+width = 45,
+height = 30,
+pointsize = 12,
+unit = "cm",
+bg = "transparent")
+
+# par(mar = c(5.1, 6.1, 4.1, 2.1)) # default mar = c(5.1, 4.1, 4.1, 2.1)
+plot(Est$dist,
+     Est$y,
+     lwd = 3,
+     type = 'l',
+     col = 'darkgreen',
+     bty = 'n',
+     xpd = T,
+     yaxt = 'n',
+     ylab = '',
+     xlab = 'Distance (m)',
+     cex.lab = 1.5,
+     cex.axis = 1.5)
+
+text(x = 100,
+     y = 0.065,
+     'Detection probability',
+     xpd = T,
+     cex = 1.5)
+
+axis(2,
+     seq(0, 0.06, 0.01),
+     las = 2,
+     xpd = T,
+     cex.axis = 1.5,
+     cex.lab = 1.5)
+
+abline(v = d.1, col = 'darkgreen', lty = 'twodash', lwd = 3)
+# ----- #
+abline(v = d.25, col = '#e98f53', lty = 'dashed', lwd = 3)
+# ----- #
+abline(v = d.50, col = '#c90808', lty = 'dotted', lwd = 3)
+
+
+legend(x = 2000,
+       y = 0.055,
+       legend = c('1 %', '25 %', '50 %'),
+       lty = c('twodash', 'dashed', 'dotted'),
+       col = c('darkgreen', '#e98f53', '#c90808'),
+       lwd = 3,
+       bty = 'n',
+       cex = 2,
+       title = 'Treshold of detection probability')
+
+dev.off()
+
