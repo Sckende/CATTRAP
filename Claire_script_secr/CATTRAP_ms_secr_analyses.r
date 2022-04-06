@@ -420,6 +420,9 @@ abline(v = d.25, col = '#e98f53', lty = 'twodash')
 # ----- #
 abline(v = d.50, col = '#c90808', lty = 'twodash')
 
+# ----- # Sigma
+abline(v = 971, col = "black")
+
 # Figure for paper
 
 png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Estimates_Detection_probs_GLOBAL.tiff",
@@ -462,13 +465,15 @@ abline(v = d.1, col = 'darkgreen', lty = 'twodash', lwd = 3)
 abline(v = d.25, col = '#e98f53', lty = 'dashed', lwd = 3)
 # ----- #
 abline(v = d.50, col = '#c90808', lty = 'dotted', lwd = 3)
+# ----- #
+abline(v = 971, col = "black")
 
 
 legend(x = 2000,
        y = 0.055,
-       legend = c('1 %', '25 %', '50 %'),
-       lty = c('twodash', 'dashed', 'dotted'),
-       col = c('darkgreen', '#e98f53', '#c90808'),
+       legend = c('1 %', '25 %', '50 %', 'sigma'),
+       lty = c('twodash', 'dashed', 'dotted', 'solid'),
+       col = c('darkgreen', '#e98f53', '#c90808', 'black'),
        lwd = 3,
        bty = 'n',
        cex = 2,
