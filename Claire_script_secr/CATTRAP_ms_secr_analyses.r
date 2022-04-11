@@ -402,7 +402,16 @@ axis(2,
      xpd = T,
      cex.axis = 1.5,
      cex.lab = 1.5)
-
+# Add a mark for sigma value
+y = Est$y[Est$dist == 971]
+arrows(x0 = 971,
+       y0 = y + 0.01,
+       x1 = 971,
+       y1 = y - 0.01,
+       code = 3,
+       length = 0,
+       col = "pink",
+       lwd = 3)
 # Valeur de sigma pour une diminution de la proba max de capture de 10%
 p.max <- max(Est$y)
 p.max10 <- p.max - ((p.max*10)/100)
@@ -436,7 +445,7 @@ abline(v = 971, col = "black")
 
 # Figure for paper
 
-png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Estimates_Detection_probs_GLOBAL.tiff",
+png("G:/Mon Drive/Projet_Publis/CATTRAP/Figures/CATTRAP_Estimates_Detection_probs_GLOBAL_2.png",
 res = 300,
 width = 45,
 height = 30,
@@ -449,7 +458,7 @@ plot(Est$dist,
      Est$y,
      lwd = 3,
      type = 'l',
-     col = 'darkgreen',
+     col = 'black',
      bty = 'n',
      xpd = T,
      yaxt = 'n',
@@ -471,24 +480,34 @@ axis(2,
      cex.axis = 1.5,
      cex.lab = 1.5)
 
-abline(v = d.1, col = 'darkgreen', lty = 'twodash', lwd = 3)
-# ----- #
-abline(v = d.25, col = '#e98f53', lty = 'dashed', lwd = 3)
-# ----- #
-abline(v = d.50, col = '#c90808', lty = 'dotted', lwd = 3)
-# ----- #
-abline(v = 971, col = "black")
+# abline(v = d.1, col = 'darkgreen', lty = 'twodash', lwd = 3)
+# # ----- #
+# abline(v = d.25, col = '#e98f53', lty = 'dashed', lwd = 3)
+# # ----- #
+# abline(v = d.50, col = '#c90808', lty = 'dotted', lwd = 3)
+# # ----- #
+# abline(v = 971, col = "black")
 
 
-legend(x = 2000,
-       y = 0.055,
-       legend = c('1 %', '25 %', '50 %', 'sigma'),
-       lty = c('twodash', 'dashed', 'dotted', 'solid'),
-       col = c('darkgreen', '#e98f53', '#c90808', 'black'),
-       lwd = 3,
-       bty = 'n',
-       cex = 2,
-       title = 'Treshold of detection probability')
+# legend(x = 2000,
+#        y = 0.055,
+#        legend = c('1 %', '25 %', '50 %', 'sigma'),
+#        lty = c('twodash', 'dashed', 'dotted', 'solid'),
+#        col = c('darkgreen', '#e98f53', '#c90808', 'black'),
+#        lwd = 3,
+#        bty = 'n',
+#        cex = 2,
+#        title = 'Treshold of detection probability')
 
+# Add a mark for sigma value
+y = Est$y[Est$dist == 971]
+arrows(x0 = 971,
+       y0 = y + 0.01,
+       x1 = 971,
+       y1 = y - 0.01,
+       code = 3,
+       length = 0,
+       col = "darkgrey",
+       lwd = 3)
 dev.off()
 
