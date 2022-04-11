@@ -32,6 +32,22 @@ grid.sp <- st_as_sf(grid,
 mapview(grid.sp, col.regions = 'red', cex = 2) + mapview(Ha2)
 mapview(grid.sp, col.regions = 'red', cex = 2)
 
+# Distance btw traps
+dis <- st_distance(grid.sp)
+dis2 <- vector()
+
+for (i in 1:40) {
+     j <- i + 1
+     dis2 <- c(dis2, dis[i, j:41])
+}
+dis2
+mean(dis2)
+sd(dis2)
+min(dis2)
+max(dis2)
+
+# ----- #
+
 class(Ha$NOM)
 Ha$NOM <- as.factor(Ha$NOM)
 mapview(Ha,

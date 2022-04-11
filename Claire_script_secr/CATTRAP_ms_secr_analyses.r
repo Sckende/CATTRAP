@@ -250,7 +250,10 @@ summary(fit1)
 # fit4 D~1 g0~hab_type sigma~hab_type halfnormal    7 -305.4191 624.838 680.838 41.587 0.0000
 
 
-summary(fit1)
+summary(fit1,
+        all.levels = T)
+predict(fit1,
+        all.levels = T)
 # $versiontime
 # [1] "4.4.5, run 10:33:50 18 mars 2022, elapsed 285.91 s"
 
@@ -295,10 +298,17 @@ summary(fit1)
 HR95 <- 3.14*((circular.r(p = 0.95,
                           detectfn = 'HN', # half-normal
                           detectpar = list(sigma = 1)))*971)^2
+
+radius95 <- circular.r(p = 0.95,
+                          detectfn = 'HN', # half-normal
+                          detectpar = list(sigma = 1))*971
 # HR95 = 7.9 km2
 HR50 <- 3.14*((circular.r(p = 0.5,
                           detectfn = 'HN', # hazard rate
-                          detectpar = list(sigma = 1)))*971)^2 #sigma = le nombre de fois qu'on multiplie le sigma- circular.r permet de d?terminer un d?multiplicateur 
+                          detectpar = list(sigma = 1)))*971)^2 #sigma = le nombre de fois qu'on multiplie le sigma- circular.r permet de determiner un demultiplicateur
+radius50 <- circular.r(p = 0.50,
+                          detectfn = 'HN', # half-normal
+                          detectpar = list(sigma = 1))*971 
 
 summary(fit2)
 # $versiontime
@@ -337,6 +347,7 @@ summary(fit2)
 # D       log 2.459369e-03 8.484166e-04 1.274667e-03 4.745161e-03
 # g0    logit 3.481748e-02 1.126138e-02 1.836096e-02 6.504628e-02
 # sigma   log 9.649586e+02 1.010112e+02 7.864083e+02 1.184048e+03
+
 
 # save.image(file = "C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/RESULTS/my_work_space3.RData")
 
