@@ -34,10 +34,12 @@ mapview(grid_sp,
 ######################################################
 
 # -----> Capture file
-capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/capture_GLOBAL_option.txt"
+# capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/capture_GLOBAL_option.txt"
+capt <- "C:/Users/ccjuhasz/Desktop/CAPTURE_CORRIGE.txt"
 
 # -----> Trap file
-trap <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/trap_GLOBAL_option5_with_covar.txt"
+# trap <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/trap_GLOBAL_option5_with_covar.txt"
+trap <- "C:/Users/ccjuhasz/Desktop/TRAP_CORRIGE.txt"
 
 
 # -----> Data check
@@ -50,7 +52,7 @@ CM <- secr::read.capthist(capt,
                           fmt = "trapID",
                           trapcovnames = "hab_type",
                           detector = "count",
-                          noccasions = 63,
+                          noccasions = 68,
                           verify = T)
 
 usage(traps(CM))
