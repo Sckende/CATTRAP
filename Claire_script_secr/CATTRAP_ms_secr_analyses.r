@@ -35,11 +35,11 @@ mapview(grid_sp,
 
 # -----> Capture file
 # capt <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/capture_GLOBAL_option.txt"
-capt <- "C:/Users/ccjuhasz/Desktop/CAPTURE_CORRIGE.txt"
+capt <- "C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/CAPTURE_CORRIGE.txt"
 
 # -----> Trap file
 # trap <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/trap_GLOBAL_option5_with_covar.txt"
-trap <- "C:/Users/ccjuhasz/Desktop/TRAP_CORRIGE.txt"
+trap <- "C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/TRAP_CORRIGE.txt"
 
 
 # -----> Data check
@@ -143,6 +143,10 @@ AIC(fit0, fit00)
 # fit00     D~1 g0~1 sigma~1  halfnormal    3 -314.6254 635.251 639.251 2.086 0.2606
 # Warning message:
 # In AIC.secr(fit0, fit00) : models not compatible for AIC
+
+####################################
+# Covariate 'modele_cam' effect ####
+####################################
 
 ###################################################
 # Covariate 'hab_type' (cloded vs. open) effect ####
@@ -513,3 +517,81 @@ arrows(x0 = 971,
        lwd = 3)
 dev.off()
 
+###################################################
+# Time effect on the sigma for the best modele ####
+###################################################
+
+time1 <- secr::secr.fit(CM,
+                        model = list(D ~ 1, g0 ~ 1, sigma ~ 1),
+                        mask = cat_mask,
+                        detectfn = 0, # half normal
+                        CL = F,
+                        verify = F,
+                        details = list(fastproximity = TRUE))
+summary(time1)
+
+time2 <- secr::secr.fit(CM,
+                        model = list(D ~ 1, g0 ~ T, sigma ~ 1), # T = linear trend over occasions on link scale
+                        mask = cat_mask,
+                        detectfn = 0, # half normal
+                        CL = F,
+                        verify = F,
+                        details = list(fastproximity = TRUE))
+summary(time2)
+
+AIC(time1,
+    time2)
+
+#                  model   detectfn npar    logLik     AIC    AICc   dAICc AICcwt
+# time1 D~1 g0~1 sigma~1 halfnormal    3 -150.4243 306.849 310.849   0.000      1
+# time2 D~1 g0~T sigma~1 halfnormal    4 -307.5565 623.113 631.113 320.264      0
+
+
+############################
+# Test of camera types ####
+##########################
+# -----> Capture file
+capt <- "C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/CAPTURE_CORRIGE.txt"
+
+# -----> Trap file
+# trap <- "C:/Users/ccjuhasz/Desktop/SMAC/GITHUB/CATTRAP/Claire_script_secr/GLOBAL_option-ABANDONNED/trap_GLOBAL_option5_with_covar.txt"
+trap <- "C:/Users/ccjuhasz/Desktop/SMAC/Projet_publi/2-CHAT_optimis_piegeage_genet/TRAP_CORRIGE_CAM_test.txt"
+
+
+# -----> Data check
+count.fields(capt)
+count.fields(trap)
+
+# -----> SECR file creation
+CM2 <- secr::read.capthist(capt,
+                          trap,
+                          fmt = "trapID",
+                          trapcovnames = "model_cam",
+                          detector = "count",
+                          noccasions = 68,
+                          verify = T)
+
+cam1 <- secr::secr.fit(CM2,
+                        model = list(D~1, g0~1, sigma~1),
+                        mask = cat_mask,
+                        detectfn = 0, # half normal
+                        CL = F,
+                        verify = F,
+                        details = list(fastproximity = TRUE))
+summary(cam1)
+
+cam2 <- secr::secr.fit(CM2,
+                        model = list(D~1, g0~model_cam, sigma~1),
+                        mask = cat_mask,
+                        detectfn = 0, # half normal
+                        CL = F,
+                        verify = F,
+                        details = list(fastproximity = TRUE))
+summary(cam2)
+
+AIC(cam1,
+    cam2)
+
+#                         model   detectfn npar    logLik     AIC    AICc  dAICc AICcwt
+# cam1         D~1 g0~1 sigma~1 halfnormal    3 -150.4243 306.849 310.849  0.000      1
+# cam2 D~1 g0~model_cam sigma~1 halfnormal    6 -143.8348 299.670 327.670 16.821      0
